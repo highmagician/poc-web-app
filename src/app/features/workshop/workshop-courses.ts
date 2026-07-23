@@ -18,7 +18,7 @@ export function getWorkshopCourseById(id: string): WorkshopCourse | undefined {
 export const WORKSHOP_COURSES: WorkshopCourse[] = [
   {
     id: 'sourdough-basics',
-    emoji: '🍞',
+    emoji: '🥖',
     priceThb: 1800,
     durationHours: 4,
     seatsLeft: 5,
@@ -34,7 +34,7 @@ export const WORKSHOP_COURSES: WorkshopCourse[] = [
   },
   {
     id: 'thai-milk-bread',
-    emoji: '🥐',
+    emoji: '🍞',
     priceThb: 2200,
     durationHours: 5,
     seatsLeft: 3,
@@ -50,7 +50,7 @@ export const WORKSHOP_COURSES: WorkshopCourse[] = [
   },
   {
     id: 'butter-croissant',
-    emoji: '🥖',
+    emoji: '🥐',
     priceThb: 2800,
     durationHours: 6,
     seatsLeft: 4,

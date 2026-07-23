@@ -1,25 +1,7 @@
 @let translations = t();
 
 <div class="checkout-page">
-  <header class="top-bar">
-    <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
-    <div class="language-switch">
-      <button
-        type="button"
-        [class.active]="languageService.language() === 'en'"
-        (click)="setLanguage('en')"
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        [class.active]="languageService.language() === 'th'"
-        (click)="setLanguage('th')"
-      >
-        ไทย
-      </button>
-    </div>
-  </header>
+  <app-top-bar />
 
   @if (draft() && course()) {
     <section class="summary">

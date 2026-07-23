@@ -1,25 +1,7 @@
 @let translations = t();
 
 <div class="workshop-page">
-  <header class="top-bar">
-    <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
-    <div class="language-switch">
-      <button
-        type="button"
-        [class.active]="languageService.language() === 'en'"
-        (click)="setLanguage('en')"
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        [class.active]="languageService.language() === 'th'"
-        (click)="setLanguage('th')"
-      >
-        ไทย
-      </button>
-    </div>
-  </header>
+  <app-top-bar />
 
   <section class="hero">
     <span class="badge">{{ translations.workshop.badge }}</span>

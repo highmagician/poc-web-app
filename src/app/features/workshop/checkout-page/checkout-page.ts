@@ -3,14 +3,14 @@ import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { LanguageService } from '../../../i18n/language.service';
-import { Language } from '../../../i18n/translations';
 import { CourseApplicationService } from '../course-application.service';
 import { getWorkshopCourseById } from '../workshop-courses';
 import { formatSessionDate } from '../../../shared/format-date';
+import { TopBar } from '../../../shared/top-bar/top-bar';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, TopBar],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.scss',
 })
@@ -34,9 +34,5 @@ export class CheckoutPage {
 
   protected formatDate(iso: string): string {
     return formatSessionDate(iso, this.languageService.language());
-  }
-
-  protected setLanguage(language: Language): void {
-    this.languageService.setLanguage(language);
   }
 }
