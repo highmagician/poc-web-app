@@ -27,4 +27,10 @@ export class AdminPage {
   protected courseName(order: { courseNameEn: string; courseNameTh: string }): string {
     return this.languageService.language() === 'th' ? order.courseNameTh : order.courseNameEn;
   }
+
+  protected cancelOrder(reference: string): void {
+    if (confirm(this.t().admin.cancelConfirm)) {
+      this.ordersService.removeOrder(reference);
+    }
+  }
 }

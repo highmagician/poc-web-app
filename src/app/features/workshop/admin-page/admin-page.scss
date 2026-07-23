@@ -97,3 +97,18 @@ tr:last-child td {
     background: #c96a32;
   }
 }
+
+.cancel-button {
+  border: 1px solid #c23434;
+  background: transparent;
+  color: #c23434;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: #c23434;
+    color: #fff;
+  }
+}
