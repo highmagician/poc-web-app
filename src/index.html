@@ -6,6 +6,23 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+    // Counterpart to the redirect in public/404.html: decode the "?/" encoded
+    // path back into a real URL via history.replaceState before Angular's router boots.
+    (function () {
+      var search = window.location.search;
+      if (search[1] === '/') {
+        var decoded = search
+          .slice(1)
+          .split('&')
+          .map(function (segment) {
+            return segment.replace(/~and~/g, '&');
+          })
+          .join('?');
+        window.history.replaceState(null, '', window.location.pathname.slice(0, -1) + decoded + window.location.hash);
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

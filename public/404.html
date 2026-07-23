@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PocWebApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+    GitHub Pages SPA deep-link redirect (https://github.com/rafgraph/spa-github-pages).
+    GitHub Pages serves this file for any unknown path (e.g. a direct visit to
+    /bakery/workshop). It re-encodes the path into a query string and redirects to the
+    app root, where the inline script in index.html decodes it back before Angular's
+    router takes over, so client-side routes are shareable/bookmarkable.
+  -->
+  <script>
+    (function () {
+      var pathSegmentsToKeep = 1; // keep "/poc-web-app" from the GitHub Pages project base path
+      var location = window.location;
+      var path = location.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/');
+      var rest = location.pathname.slice(path.length);
+
+      location.replace(
+        path +
+          '/?/' +
+          rest.replace(/&/g, '~and~') +
+          (location.search ? '&' + location.search.slice(1).replace(/&/g, '~and~') : '') +
+          location.hash
+      );
+    })();
+  </script>
+</head>
+<body>
+</body>
+</html>

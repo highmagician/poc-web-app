@@ -1,0 +1,169 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.checkout-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .language-switch {
+    display: flex;
+    gap: 0.25rem;
+    background: #fff;
+    border: 1px solid #e6d5c0;
+    border-radius: 999px;
+    padding: 0.25rem;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #8a6a4e;
+
+      &.active {
+        background: #e07a3f;
+        color: #fff;
+      }
+    }
+  }
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #8a6a4e;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+
+  h2 {
+    font-size: 1rem;
+    margin-top: 0;
+    color: #8a6a4e;
+  }
+}
+
+.course-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .emoji {
+    font-size: 1.8rem;
+  }
+
+  .meta {
+    color: #8a6a4e;
+    font-size: 0.85rem;
+  }
+
+  .price {
+    margin-left: auto;
+    font-weight: 700;
+    color: #b8541c;
+  }
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  dt {
+    color: #a88a6f;
+    font-size: 0.78rem;
+    margin-bottom: 0.15rem;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  padding: 1rem 1.5rem;
+  background: #fbe3cd;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  a {
+    color: #8a6a4e;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.primary-button {
+  background: #e07a3f;
+  color: #fff !important;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none !important;
+  display: inline-block;
+
+  &:hover {
+    background: #c96a32;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+
+  p {
+    color: #8a6a4e;
+    margin-bottom: 1.5rem;
+  }
+}

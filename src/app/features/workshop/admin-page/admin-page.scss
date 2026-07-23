@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .language-switch {
+    display: flex;
+    gap: 0.25rem;
+    background: #fff;
+    border: 1px solid #e6d5c0;
+    border-radius: 999px;
+    padding: 0.25rem;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #8a6a4e;
+
+      &.active {
+        background: #e07a3f;
+        color: #fff;
+      }
+    }
+  }
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #8a6a4e;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.table-wrapper {
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0e0cc;
+}
+
+th {
+  color: #8a6a4e;
+  font-weight: 600;
+  background: #fdf6ec;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.reference {
+  font-weight: 600;
+  color: #b8541c;
+}
+
+.total {
+  font-weight: 700;
+}
+
+.muted {
+  color: #a88a6f;
+  font-size: 0.78rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+
+  p {
+    color: #8a6a4e;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.primary-button {
+  background: #e07a3f;
+  color: #fff !important;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none !important;
+  display: inline-block;
+
+  &:hover {
+    background: #c96a32;
+  }
+}

@@ -1,0 +1,259 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+}
+
+.workshop-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .language-switch {
+    display: flex;
+    gap: 0.25rem;
+    background: #fff;
+    border: 1px solid #e6d5c0;
+    border-radius: 999px;
+    padding: 0.25rem;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #8a6a4e;
+
+      &.active {
+        background: #e07a3f;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  .badge {
+    display: inline-block;
+    background: #fbe3cd;
+    color: #b8541c;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .subtitle {
+    color: #8a6a4e;
+    margin-bottom: 1.5rem;
+  }
+
+  .intro-paragraph {
+    max-width: 640px;
+    margin: 0 auto 0.75rem;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .highlights {
+    max-width: 640px;
+    margin: 2rem auto 0;
+    text-align: left;
+    background: #fff;
+    border: 1px solid #f0e0cc;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+
+    h2 {
+      font-size: 1.1rem;
+      margin-top: 0;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      line-height: 1.7;
+    }
+  }
+}
+
+section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.section-subtitle {
+  color: #8a6a4e;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.course-card {
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &.selected {
+    border-color: #e07a3f;
+    box-shadow: 0 0 0 2px rgba(224, 122, 63, 0.25);
+  }
+
+  .course-emoji {
+    font-size: 2rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .course-description {
+    color: #6b5442;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .course-facts {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    font-size: 0.8rem;
+
+    dt {
+      color: #a88a6f;
+    }
+
+    dd {
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  .course-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+
+    .price {
+      font-weight: 700;
+      color: #b8541c;
+      font-size: 0.9rem;
+    }
+
+    button {
+      border: 1px solid #e07a3f;
+      background: transparent;
+      color: #e07a3f;
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+  }
+
+  &.selected .course-footer button {
+    background: #e07a3f;
+    color: #fff;
+  }
+}
+
+.application {
+  margin-top: 3rem;
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid #f0e0cc;
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    color: #6b5442;
+
+    &.notes-field {
+      grid-column: 1 / -1;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #e0cbb0;
+    border-radius: 10px;
+    background: #fffdfa;
+    color: #4a2f22;
+
+    &:focus {
+      outline: 2px solid #e07a3f;
+      outline-offset: 1px;
+    }
+  }
+
+  .error {
+    color: #c23434;
+    font-size: 0.78rem;
+  }
+
+  .submit-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+    background: #e07a3f;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      background: #c96a32;
+    }
+  }
+}

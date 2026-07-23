@@ -1,0 +1,105 @@
+@let translations = t();
+
+<div class="payment-page">
+  <header class="top-bar">
+    <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
+    <div class="language-switch">
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'en'"
+        (click)="setLanguage('en')"
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'th'"
+        (click)="setLanguage('th')"
+      >
+        ไทย
+      </button>
+    </div>
+  </header>
+
+  @if (!draft() || !course()) {
+    <section class="empty-state">
+      <h1>{{ translations.payment.emptyTitle }}</h1>
+      <p>{{ translations.payment.emptyMessage }}</p>
+      <a routerLink="/bakery/workshop" class="primary-button">{{ translations.payment.emptyCta }}</a>
+    </section>
+  } @else if (reference()) {
+    <section class="success-state">
+      <div class="success-icon">✅</div>
+      <h1>{{ translations.payment.successTitle }}</h1>
+      <p>{{ translations.payment.successMessage }}</p>
+      <div class="reference-card">
+        <span>{{ translations.payment.referenceLabel }}</span>
+        <strong>{{ reference() }}</strong>
+      </div>
+      <a routerLink="/bakery/workshop" class="primary-button">{{ translations.payment.backHome }}</a>
+    </section>
+  } @else {
+    <section class="payment-form">
+      <h1>{{ translations.payment.title }}</h1>
+      <p class="subtitle">{{ translations.payment.subtitle }}</p>
+      <p class="demo-notice">{{ translations.payment.demoNotice }}</p>
+
+      <div class="card order-total-card">
+        <span>{{ translations.payment.orderTotal }}</span>
+        <strong>฿{{ total() | number }}</strong>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="pay()" novalidate>
+        <h2>{{ translations.payment.methodTitle }}</h2>
+        <div class="method-options">
+          <label class="method-option" [class.selected]="form.controls.method.value === 'card'">
+            <input type="radio" formControlName="method" value="card" (change)="selectMethod('card')" />
+            {{ translations.payment.methods.card }}
+          </label>
+          <label class="method-option" [class.selected]="form.controls.method.value === 'promptpay'">
+            <input type="radio" formControlName="method" value="promptpay" (change)="selectMethod('promptpay')" />
+            {{ translations.payment.methods.promptpay }}
+          </label>
+          <label class="method-option" [class.selected]="form.controls.method.value === 'transfer'">
+            <input type="radio" formControlName="method" value="transfer" (change)="selectMethod('transfer')" />
+            {{ translations.payment.methods.transfer }}
+          </label>
+        </div>
+
+        @if (form.controls.method.value === 'card') {
+          <div class="card-fields">
+            <label>
+              {{ translations.payment.cardholderName }}
+              <input type="text" formControlName="cardholderName" />
+            </label>
+            <label>
+              {{ translations.payment.cardNumber }}
+              <input type="text" formControlName="cardNumber" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" />
+            </label>
+            <label>
+              {{ translations.payment.expiry }}
+              <input type="text" formControlName="expiry" placeholder="MM/YY" />
+            </label>
+            <label>
+              {{ translations.payment.cvv }}
+              <input type="text" formControlName="cvv" inputmode="numeric" maxlength="4" placeholder="123" />
+            </label>
+          </div>
+        } @else if (form.controls.method.value === 'promptpay') {
+          <div class="method-placeholder">
+            <div class="qr-placeholder">QR</div>
+          </div>
+        } @else {
+          <div class="method-placeholder transfer-details">
+            <p>Bangkok Bank · 123-4-56789-0 · Homie Bakery Co., Ltd.</p>
+          </div>
+        }
+
+        <div class="actions">
+          <a routerLink="/bakery/workshop/checkout">{{ translations.payment.backToCheckout }}</a>
+          <button type="submit" class="primary-button">{{ translations.payment.payNow }}</button>
+        </div>
+      </form>
+    </section>
+  }
+</div>

@@ -1,0 +1,70 @@
+@let translations = t();
+
+<div class="admin-page">
+  <header class="top-bar">
+    <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
+    <div class="language-switch">
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'en'"
+        (click)="setLanguage('en')"
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'th'"
+        (click)="setLanguage('th')"
+      >
+        ไทย
+      </button>
+    </div>
+  </header>
+
+  <h1>{{ translations.admin.title }}</h1>
+  <p class="subtitle">{{ translations.admin.subtitle }}</p>
+
+  @if (orders().length === 0) {
+    <section class="empty-state">
+      <h2>{{ translations.admin.emptyTitle }}</h2>
+      <p>{{ translations.admin.emptyMessage }}</p>
+      <a routerLink="/bakery/workshop" class="primary-button">{{ translations.admin.backToWorkshop }}</a>
+    </section>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ translations.admin.columns.createdAt }}</th>
+            <th>{{ translations.admin.columns.reference }}</th>
+            <th>{{ translations.admin.columns.course }}</th>
+            <th>{{ translations.admin.columns.applicant }}</th>
+            <th>{{ translations.admin.columns.contact }}</th>
+            <th>{{ translations.admin.columns.date }}</th>
+            <th>{{ translations.admin.columns.participants }}</th>
+            <th>{{ translations.admin.columns.method }}</th>
+            <th>{{ translations.admin.columns.total }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of orders(); track order.reference) {
+            <tr>
+              <td>{{ formatTimestamp(order.createdAtIso) }}</td>
+              <td class="reference">{{ order.reference }}</td>
+              <td>{{ courseName(order) }}</td>
+              <td>{{ order.fullName }}</td>
+              <td>
+                <div>{{ order.email }}</div>
+                <div class="muted">{{ order.phone }}</div>
+              </td>
+              <td>{{ order.preferredDate }}</td>
+              <td>{{ order.participants }}</td>
+              <td>{{ order.paymentMethod }}</td>
+              <td class="total">฿{{ order.totalThb | number }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

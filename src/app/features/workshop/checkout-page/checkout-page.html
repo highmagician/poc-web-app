@@ -1,0 +1,90 @@
+@let translations = t();
+
+<div class="checkout-page">
+  <header class="top-bar">
+    <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
+    <div class="language-switch">
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'en'"
+        (click)="setLanguage('en')"
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        [class.active]="languageService.language() === 'th'"
+        (click)="setLanguage('th')"
+      >
+        ไทย
+      </button>
+    </div>
+  </header>
+
+  @if (draft() && course()) {
+    <section class="summary">
+      <h1>{{ translations.checkout.title }}</h1>
+      <p class="subtitle">{{ translations.checkout.subtitle }}</p>
+
+      <div class="card">
+        <h2>{{ translations.checkout.courseSummary }}</h2>
+        <div class="course-row">
+          <span class="emoji">{{ course()!.emoji }}</span>
+          <div>
+            <strong>{{ course()!.name[languageService.language()] }}</strong>
+            <div class="meta">{{ formatDate(course()!.nextSessionIso) }}</div>
+          </div>
+          <span class="price">฿{{ course()!.priceThb | number }}</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>{{ translations.checkout.applicantSummary }}</h2>
+        <dl>
+          <div>
+            <dt>{{ translations.checkout.name }}</dt>
+            <dd>{{ draft()!.fullName }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkout.email }}</dt>
+            <dd>{{ draft()!.email }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkout.phone }}</dt>
+            <dd>{{ draft()!.phone }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkout.date }}</dt>
+            <dd>{{ draft()!.preferredDate }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkout.participants }}</dt>
+            <dd>{{ draft()!.participants }}</dd>
+          </div>
+          <div class="full-width">
+            <dt>{{ translations.checkout.notes }}</dt>
+            <dd>{{ draft()!.notes || translations.checkout.noNotes }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="total-row">
+        <span>{{ translations.checkout.total }}</span>
+        <strong>฿{{ total() | number }}</strong>
+      </div>
+
+      <div class="actions">
+        <a routerLink="/bakery/workshop">{{ translations.checkout.backToWorkshop }}</a>
+        <a routerLink="/bakery/workshop/payment" class="primary-button">
+          {{ translations.checkout.proceedToPayment }}
+        </a>
+      </div>
+    </section>
+  } @else {
+    <section class="empty-state">
+      <h1>{{ translations.checkout.emptyTitle }}</h1>
+      <p>{{ translations.checkout.emptyMessage }}</p>
+      <a routerLink="/bakery/workshop" class="primary-button">{{ translations.checkout.emptyCta }}</a>
+    </section>
+  }
+</div>
