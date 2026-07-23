@@ -1,0 +1,25 @@
+@let translations = t();
+
+<header class="top-bar">
+  <span class="brand">🏠🍞 {{ translations.common.siteName }}</span>
+  <div class="language-switch">
+    <button
+      type="button"
+      [class.active]="languageService.language() === 'th'"
+      (click)="setLanguage('th')"
+      aria-label="ไทย"
+      title="ไทย"
+    >
+      🇹🇭
+    </button>
+    <button
+      type="button"
+      [class.active]="languageService.language() === 'en'"
+      (click)="setLanguage('en')"
+      aria-label="English"
+      title="English"
+    >
+      🇬🇧
+    </button>
+  </div>
+</header>

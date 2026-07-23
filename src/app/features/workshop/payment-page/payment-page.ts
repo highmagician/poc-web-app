@@ -4,15 +4,15 @@ import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../../i18n/language.service';
-import { Language } from '../../../i18n/translations';
 import { CourseApplicationService } from '../course-application.service';
 import { getWorkshopCourseById } from '../workshop-courses';
 import { WorkshopOrdersService } from '../workshop-orders.service';
 import { PaymentMethod } from '../workshop-order';
+import { TopBar } from '../../../shared/top-bar/top-bar';
 
 @Component({
   selector: 'app-payment-page',
-  imports: [RouterLink, DecimalPipe, ReactiveFormsModule],
+  imports: [RouterLink, DecimalPipe, ReactiveFormsModule, TopBar],
   templateUrl: './payment-page.html',
   styleUrl: './payment-page.scss',
 })
@@ -44,10 +44,6 @@ export class PaymentPage {
     expiry: [''],
     cvv: [''],
   });
-
-  protected setLanguage(language: Language): void {
-    this.languageService.setLanguage(language);
-  }
 
   protected selectMethod(method: PaymentMethod): void {
     this.form.controls.method.setValue(method);

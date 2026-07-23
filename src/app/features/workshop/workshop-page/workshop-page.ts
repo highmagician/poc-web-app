@@ -4,17 +4,17 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../../i18n/language.service';
-import { Language } from '../../../i18n/translations';
 import { WORKSHOP_COURSES } from '../workshop-courses';
 import { CourseApplicationService } from '../course-application.service';
 import { formatSessionDate } from '../../../shared/format-date';
+import { TopBar } from '../../../shared/top-bar/top-bar';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[0-9+()\-\s]{7,}$/;
 
 @Component({
   selector: 'app-workshop-page',
-  imports: [ReactiveFormsModule, DecimalPipe],
+  imports: [ReactiveFormsModule, DecimalPipe, TopBar],
   templateUrl: './workshop-page.html',
   styleUrl: './workshop-page.scss',
 })
@@ -36,10 +36,6 @@ export class WorkshopPage {
     participants: [2, [Validators.required, Validators.min(1), Validators.max(8)]],
     notes: [''],
   });
-
-  protected setLanguage(language: Language): void {
-    this.languageService.setLanguage(language);
-  }
 
   protected selectCourse(courseId: string): void {
     this.form.controls.courseId.setValue(courseId);

@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .language-switch {
+    display: flex;
+    gap: 0.25rem;
+    background: #fff;
+    border: 1px solid #e6d5c0;
+    border-radius: 999px;
+    padding: 0.25rem;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      color: #8a6a4e;
+
+      &.active {
+        background: #e07a3f;
+      }
+    }
+  }
+}
