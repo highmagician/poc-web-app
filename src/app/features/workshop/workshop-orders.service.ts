@@ -27,4 +27,10 @@ export class WorkshopOrdersService {
     this._orders.set(orders);
     localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
   }
+
+  removeOrder(reference: string): void {
+    const orders = this._orders().filter((order) => order.reference !== reference);
+    this._orders.set(orders);
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  }
 }

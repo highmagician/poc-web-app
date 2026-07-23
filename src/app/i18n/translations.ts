@@ -19,7 +19,6 @@ export interface Translations {
     hours: string;
     schedule: string;
     seatsLeft: string;
-    selected: string;
     select: string;
     formTitle: string;
     formSubtitle: string;
@@ -92,6 +91,8 @@ export interface Translations {
     emptyTitle: string;
     emptyMessage: string;
     backToWorkshop: string;
+    cancelButton: string;
+    cancelConfirm: string;
     columns: {
       createdAt: string;
       reference: string;
@@ -102,6 +103,7 @@ export interface Translations {
       participants: string;
       method: string;
       total: string;
+      actions: string;
     };
   };
 }
@@ -135,7 +137,6 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       hours: 'hours',
       schedule: 'Next session',
       seatsLeft: 'seats left',
-      selected: 'Selected',
       select: 'Select this course',
       formTitle: 'Apply for a course',
       formSubtitle: "Tell us about yourself and we'll hold your seat while you complete checkout",
@@ -208,6 +209,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       emptyTitle: 'No applications yet',
       emptyMessage: 'Completed applications will show up here once someone pays for a course.',
       backToWorkshop: 'Back to workshop page',
+      cancelButton: 'Cancel booking',
+      cancelConfirm: 'Cancel this booking? This cannot be undone.',
       columns: {
         createdAt: 'Submitted',
         reference: 'Reference',
@@ -218,6 +221,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'Participants',
         method: 'Payment method',
         total: 'Total',
+        actions: 'Actions',
       },
     },
   },
@@ -249,7 +253,6 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       hours: 'ชั่วโมง',
       schedule: 'รอบถัดไป',
       seatsLeft: 'ที่นั่งว่าง',
-      selected: 'เลือกแล้ว',
       select: 'เลือกคอร์สนี้',
       formTitle: 'สมัครเรียนคอร์ส',
       formSubtitle: 'บอกข้อมูลของคุณ แล้วเราจะกันที่นั่งไว้ระหว่างที่คุณทำการชำระเงิน',
@@ -322,6 +325,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       emptyTitle: 'ยังไม่มีใบสมัคร',
       emptyMessage: 'ใบสมัครที่ชำระเงินสำเร็จจะแสดงที่นี่',
       backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
+      cancelButton: 'ยกเลิกการจอง',
+      cancelConfirm: 'ยืนยันยกเลิกการจองนี้ใช่หรือไม่ การดำเนินการนี้ไม่สามารถย้อนกลับได้',
       columns: {
         createdAt: 'วันที่สมัคร',
         reference: 'หมายเลขอ้างอิง',
@@ -332,6 +337,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'จำนวนผู้เข้าร่วม',
         method: 'วิธีชำระเงิน',
         total: 'ยอดรวม',
+        actions: 'การจัดการ',
       },
     },
   },

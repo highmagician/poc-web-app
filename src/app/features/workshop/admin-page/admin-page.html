@@ -26,6 +26,7 @@
             <th>{{ translations.admin.columns.participants }}</th>
             <th>{{ translations.admin.columns.method }}</th>
             <th>{{ translations.admin.columns.total }}</th>
+            <th>{{ translations.admin.columns.actions }}</th>
           </tr>
         </thead>
         <tbody>
@@ -43,6 +44,11 @@
               <td>{{ order.participants }}</td>
               <td>{{ order.paymentMethod }}</td>
               <td class="total">฿{{ order.totalThb | number }}</td>
+              <td>
+                <button type="button" class="cancel-button" (click)="cancelOrder(order.reference)">
+                  {{ translations.admin.cancelButton }}
+                </button>
+              </td>
             </tr>
           }
         </tbody>

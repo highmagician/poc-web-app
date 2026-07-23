@@ -1,0 +1,76 @@
+@let translations = t();
+
+<div class="apply-page">
+  <app-top-bar />
+
+  <section class="application">
+    <h1>{{ translations.workshop.formTitle }}</h1>
+    <p class="section-subtitle">{{ translations.workshop.formSubtitle }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        {{ translations.workshop.fields.course }}
+        <select formControlName="courseId">
+          <option value="" disabled>{{ translations.workshop.fields.coursePlaceholder }}</option>
+          @for (course of courses; track course.id) {
+            <option [value]="course.id">{{ course.name[languageService.language()] }}</option>
+          }
+        </select>
+        @if (form.controls.courseId.invalid && form.controls.courseId.touched) {
+          <span class="error">{{ translations.workshop.validation.required }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.workshop.fields.fullName }}
+        <input type="text" formControlName="fullName" />
+        @if (form.controls.fullName.invalid && form.controls.fullName.touched) {
+          <span class="error">{{ translations.workshop.validation.required }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.workshop.fields.email }}
+        <input type="email" formControlName="email" />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <span class="error">{{ translations.workshop.validation.invalidEmail }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.workshop.fields.phone }}
+        <input type="tel" formControlName="phone" />
+        @if (form.controls.phone.invalid && form.controls.phone.touched) {
+          <span class="error">{{ translations.workshop.validation.invalidPhone }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.workshop.fields.preferredDate }}
+        <input type="date" formControlName="preferredDate" />
+        @if (form.controls.preferredDate.invalid && form.controls.preferredDate.touched) {
+          <span class="error">{{ translations.workshop.validation.required }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.workshop.fields.participants }}
+        <input type="number" min="1" max="8" formControlName="participants" />
+        @if (form.controls.participants.invalid && form.controls.participants.touched) {
+          <span class="error">{{ translations.workshop.validation.participantsRange }}</span>
+        }
+      </label>
+
+      <label class="notes-field">
+        {{ translations.workshop.fields.notes }}
+        <textarea
+          formControlName="notes"
+          rows="3"
+          [placeholder]="translations.workshop.fields.notesPlaceholder"
+        ></textarea>
+      </label>
+
+      <button type="submit" class="submit-button">{{ translations.workshop.submit }}</button>
+    </form>
+  </section>
+</div>

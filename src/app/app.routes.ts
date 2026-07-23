@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./features/workshop/workshop-page/workshop-page').then((m) => m.WorkshopPage),
   },
   {
+    path: 'bakery/workshop/apply',
+    loadComponent: () =>
+      import('./features/workshop/apply-page/apply-page').then((m) => m.ApplyPage),
+  },
+  {
     path: 'bakery/workshop/checkout',
     loadComponent: () =>
       import('./features/workshop/checkout-page/checkout-page').then((m) => m.CheckoutPage),

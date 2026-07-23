@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.apply-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+}
+
+.section-subtitle {
+  color: #8a6a4e;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.application {
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid #f0e0cc;
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    color: #6b5442;
+
+    &.notes-field {
+      grid-column: 1 / -1;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #e0cbb0;
+    border-radius: 10px;
+    background: #fffdfa;
+    color: #4a2f22;
+
+    &:focus {
+      outline: 2px solid #e07a3f;
+      outline-offset: 1px;
+    }
+  }
+
+  .error {
+    color: #c23434;
+    font-size: 0.78rem;
+  }
+
+  .submit-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+    background: #e07a3f;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      background: #c96a32;
+    }
+  }
+}
