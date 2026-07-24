@@ -40,6 +40,8 @@ export interface Translations {
       participantsRange: string;
     };
     submit: string;
+    submitting: string;
+    submitError: string;
   };
   checkout: {
     title: string;
@@ -76,6 +78,8 @@ export interface Translations {
     cvv: string;
     orderTotal: string;
     payNow: string;
+    processing: string;
+    submitError: string;
     backToCheckout: string;
     emptyTitle: string;
     emptyMessage: string;
@@ -93,6 +97,11 @@ export interface Translations {
     backToWorkshop: string;
     cancelButton: string;
     cancelConfirm: string;
+    loadError: string;
+    statusLabels: {
+      pending: string;
+      paid: string;
+    };
     columns: {
       createdAt: string;
       reference: string;
@@ -103,6 +112,7 @@ export interface Translations {
       participants: string;
       method: string;
       total: string;
+      status: string;
       actions: string;
     };
   };
@@ -158,6 +168,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participantsRange: 'Choose between 1 and 8 participants',
       },
       submit: 'Continue to checkout',
+      submitting: 'Submitting…',
+      submitError: "Couldn't submit your application. Please try again.",
     },
     checkout: {
       title: 'Checkout',
@@ -194,6 +206,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       cvv: 'CVV',
       orderTotal: 'Amount to pay',
       payNow: 'Pay now',
+      processing: 'Processing…',
+      submitError: "Couldn't confirm your payment. Please try again.",
       backToCheckout: 'Back to checkout',
       emptyTitle: 'Nothing to pay for yet',
       emptyMessage: 'Please apply for a course and complete checkout first.',
@@ -205,12 +219,17 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     },
     admin: {
       title: 'Workshop applications',
-      subtitle: 'All course applications submitted through checkout and payment',
+      subtitle: 'All course applications submitted through the apply form',
       emptyTitle: 'No applications yet',
-      emptyMessage: 'Completed applications will show up here once someone pays for a course.',
+      emptyMessage: 'Submitted applications will show up here.',
       backToWorkshop: 'Back to workshop page',
       cancelButton: 'Cancel booking',
       cancelConfirm: 'Cancel this booking? This cannot be undone.',
+      loadError: "Couldn't load applications. Please try again.",
+      statusLabels: {
+        pending: 'Pending payment',
+        paid: 'Paid',
+      },
       columns: {
         createdAt: 'Submitted',
         reference: 'Reference',
@@ -221,6 +240,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'Participants',
         method: 'Payment method',
         total: 'Total',
+        status: 'Status',
         actions: 'Actions',
       },
     },
@@ -274,6 +294,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participantsRange: 'กรุณาเลือกจำนวนผู้เข้าร่วมระหว่าง 1 ถึง 8 คน',
       },
       submit: 'ดำเนินการชำระเงิน',
+      submitting: 'กำลังส่งข้อมูล...',
+      submitError: 'ไม่สามารถส่งใบสมัครได้ กรุณาลองใหม่อีกครั้ง',
     },
     checkout: {
       title: 'สรุปคำสั่งซื้อ',
@@ -310,6 +332,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       cvv: 'CVV',
       orderTotal: 'จำนวนเงินที่ต้องชำระ',
       payNow: 'ชำระเงินตอนนี้',
+      processing: 'กำลังดำเนินการ...',
+      submitError: 'ไม่สามารถยืนยันการชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
       backToCheckout: 'กลับไปหน้าสรุปคำสั่งซื้อ',
       emptyTitle: 'ยังไม่มีรายการที่ต้องชำระ',
       emptyMessage: 'กรุณาสมัครคอร์สและทำรายการสรุปคำสั่งซื้อก่อน',
@@ -321,12 +345,17 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     },
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',
-      subtitle: 'ใบสมัครคอร์สทั้งหมดที่ผ่านขั้นตอนสรุปคำสั่งซื้อและชำระเงินแล้ว',
+      subtitle: 'ใบสมัครคอร์สทั้งหมดที่ส่งผ่านแบบฟอร์มสมัคร',
       emptyTitle: 'ยังไม่มีใบสมัคร',
-      emptyMessage: 'ใบสมัครที่ชำระเงินสำเร็จจะแสดงที่นี่',
+      emptyMessage: 'ใบสมัครที่ส่งเข้ามาจะแสดงที่นี่',
       backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
       cancelButton: 'ยกเลิกการจอง',
       cancelConfirm: 'ยืนยันยกเลิกการจองนี้ใช่หรือไม่ การดำเนินการนี้ไม่สามารถย้อนกลับได้',
+      loadError: 'ไม่สามารถโหลดรายการใบสมัครได้ กรุณาลองใหม่อีกครั้ง',
+      statusLabels: {
+        pending: 'รอชำระเงิน',
+        paid: 'ชำระเงินแล้ว',
+      },
       columns: {
         createdAt: 'วันที่สมัคร',
         reference: 'หมายเลขอ้างอิง',
@@ -337,6 +366,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'จำนวนผู้เข้าร่วม',
         method: 'วิธีชำระเงิน',
         total: 'ยอดรวม',
+        status: 'สถานะ',
         actions: 'การจัดการ',
       },
     },

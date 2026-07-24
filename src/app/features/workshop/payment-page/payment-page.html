@@ -77,9 +77,15 @@
           </div>
         }
 
+        @if (submitError()) {
+          <p class="error">{{ translations.payment.submitError }}</p>
+        }
+
         <div class="actions">
           <a routerLink="/bakery/workshop/checkout">{{ translations.payment.backToCheckout }}</a>
-          <button type="submit" class="primary-button">{{ translations.payment.payNow }}</button>
+          <button type="submit" class="primary-button" [disabled]="processing()">
+            {{ processing() ? translations.payment.processing : translations.payment.payNow }}
+          </button>
         </div>
       </form>
     </section>

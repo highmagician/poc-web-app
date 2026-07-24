@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { LanguageService } from '../../../i18n/language.service';
 import { WORKSHOP_COURSES, getWorkshopCourseById } from '../workshop-courses';
 import { CourseApplicationService } from '../course-application.service';
+import { WorkshopApplicationsService } from '../workshop-applications.service';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,10 +22,13 @@ export class ApplyPage {
   private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
   private readonly applicationService = inject(CourseApplicationService);
+  private readonly applicationsApi = inject(WorkshopApplicationsService);
 
   protected readonly languageService = inject(LanguageService);
   protected readonly t = this.languageService.t;
   protected readonly courses = WORKSHOP_COURSES;
+  protected readonly submitting = signal(false);
+  protected readonly submitError = signal(false);
 
   protected readonly form = this.formBuilder.nonNullable.group({
     courseId: [this.preselectedCourseId(), Validators.required],
@@ -41,13 +45,23 @@ export class ApplyPage {
     return getWorkshopCourseById(courseId) ? courseId : '';
   }
 
-  protected submit(): void {
+  protected async submit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    this.applicationService.submitApplication(this.form.getRawValue());
-    this.router.navigate(['/bakery/workshop/checkout']);
+    this.submitError.set(false);
+    this.submitting.set(true);
+
+    try {
+      const application = await this.applicationsApi.create(this.form.getRawValue());
+      this.applicationService.submitApplication({ id: application.id, ...this.form.getRawValue() });
+      this.router.navigate(['/bakery/workshop/checkout']);
+    } catch {
+      this.submitError.set(true);
+    } finally {
+      this.submitting.set(false);
+    }
   }
 }

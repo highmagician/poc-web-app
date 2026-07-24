@@ -6,13 +6,17 @@
   <h1>{{ translations.admin.title }}</h1>
   <p class="subtitle">{{ translations.admin.subtitle }}</p>
 
-  @if (orders().length === 0) {
+  @if (loadError()) {
+    <p class="error">{{ translations.admin.loadError }}</p>
+  }
+
+  @if (!loading() && applications().length === 0) {
     <section class="empty-state">
       <h2>{{ translations.admin.emptyTitle }}</h2>
       <p>{{ translations.admin.emptyMessage }}</p>
       <a routerLink="/bakery/workshop" class="primary-button">{{ translations.admin.backToWorkshop }}</a>
     </section>
-  } @else {
+  } @else if (applications().length > 0) {
     <div class="table-wrapper">
       <table>
         <thead>
@@ -26,26 +30,28 @@
             <th>{{ translations.admin.columns.participants }}</th>
             <th>{{ translations.admin.columns.method }}</th>
             <th>{{ translations.admin.columns.total }}</th>
+            <th>{{ translations.admin.columns.status }}</th>
             <th>{{ translations.admin.columns.actions }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (order of orders(); track order.reference) {
+          @for (application of applications(); track application.id) {
             <tr>
-              <td>{{ formatTimestamp(order.createdAtIso) }}</td>
-              <td class="reference">{{ order.reference }}</td>
-              <td>{{ courseName(order) }}</td>
-              <td>{{ order.fullName }}</td>
+              <td>{{ formatTimestamp(application.createdAtIso) }}</td>
+              <td class="reference">{{ application.reference || '—' }}</td>
+              <td>{{ courseName(application.courseId) }}</td>
+              <td>{{ application.fullName }}</td>
               <td>
-                <div>{{ order.email }}</div>
-                <div class="muted">{{ order.phone }}</div>
+                <div>{{ application.email }}</div>
+                <div class="muted">{{ application.phone }}</div>
               </td>
-              <td>{{ order.preferredDate }}</td>
-              <td>{{ order.participants }}</td>
-              <td>{{ order.paymentMethod }}</td>
-              <td class="total">฿{{ order.totalThb | number }}</td>
+              <td>{{ application.preferredDate }}</td>
+              <td>{{ application.participants }}</td>
+              <td>{{ application.paymentMethod || '—' }}</td>
+              <td class="total">{{ application.totalThb ? '฿' + (application.totalThb | number) : '—' }}</td>
+              <td>{{ translations.admin.statusLabels[application.status] }}</td>
               <td>
-                <button type="button" class="cancel-button" (click)="cancelOrder(order.reference)">
+                <button type="button" class="cancel-button" (click)="cancelOrder(application.id)">
                   {{ translations.admin.cancelButton }}
                 </button>
               </td>

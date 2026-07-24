@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
 export interface CourseApplicationDraft {
+  id: string;
   courseId: string;
   fullName: string;
   email: string;
@@ -23,10 +24,12 @@ export class CourseApplicationService {
     this._reference.set(null);
   }
 
-  confirmPayment(): string {
-    const reference = `HB-${Math.floor(100000 + Math.random() * 900000)}`;
+  generateReference(): string {
+    return `HB-${Math.floor(100000 + Math.random() * 900000)}`;
+  }
+
+  confirmPayment(reference: string): void {
     this._reference.set(reference);
-    return reference;
   }
 
   clear(): void {

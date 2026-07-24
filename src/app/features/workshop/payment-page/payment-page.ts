@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,8 +6,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LanguageService } from '../../../i18n/language.service';
 import { CourseApplicationService } from '../course-application.service';
 import { getWorkshopCourseById } from '../workshop-courses';
-import { WorkshopOrdersService } from '../workshop-orders.service';
-import { PaymentMethod } from '../workshop-order';
+import { WorkshopApplicationsService, PaymentMethod } from '../workshop-applications.service';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
 @Component({
@@ -19,12 +18,14 @@ import { TopBar } from '../../../shared/top-bar/top-bar';
 export class PaymentPage {
   private readonly formBuilder = inject(FormBuilder);
   private readonly applicationService = inject(CourseApplicationService);
-  private readonly ordersService = inject(WorkshopOrdersService);
+  private readonly applicationsApi = inject(WorkshopApplicationsService);
 
   protected readonly languageService = inject(LanguageService);
   protected readonly t = this.languageService.t;
   protected readonly draft = this.applicationService.draft;
   protected readonly reference = this.applicationService.reference;
+  protected readonly processing = signal(false);
+  protected readonly submitError = signal(false);
 
   protected readonly course = computed(() => {
     const draft = this.draft();
@@ -49,7 +50,7 @@ export class PaymentPage {
     this.form.controls.method.setValue(method);
   }
 
-  protected pay(): void {
+  protected async pay(): Promise<void> {
     const method = this.form.controls.method.value;
 
     if (method === 'card') {
@@ -66,22 +67,22 @@ export class PaymentPage {
       return;
     }
 
-    const reference = this.applicationService.confirmPayment();
+    this.submitError.set(false);
+    this.processing.set(true);
 
-    this.ordersService.addOrder({
-      reference,
-      createdAtIso: new Date().toISOString(),
-      courseId: course.id,
-      courseNameEn: course.name.en,
-      courseNameTh: course.name.th,
-      fullName: draft.fullName,
-      email: draft.email,
-      phone: draft.phone,
-      preferredDate: draft.preferredDate,
-      participants: draft.participants,
-      notes: draft.notes,
-      paymentMethod: method,
-      totalThb: this.total(),
-    });
+    const reference = this.applicationService.generateReference();
+
+    try {
+      await this.applicationsApi.completePayment(draft.id, {
+        paymentMethod: method,
+        totalThb: this.total(),
+        reference,
+      });
+      this.applicationService.confirmPayment(reference);
+    } catch {
+      this.submitError.set(true);
+    } finally {
+      this.processing.set(false);
+    }
   }
 }
