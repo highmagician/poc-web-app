@@ -70,7 +70,13 @@
         ></textarea>
       </label>
 
-      <button type="submit" class="submit-button">{{ translations.workshop.submit }}</button>
+      @if (submitError()) {
+        <p class="error">{{ translations.workshop.submitError }}</p>
+      }
+
+      <button type="submit" class="submit-button" [disabled]="submitting()">
+        {{ submitting() ? translations.workshop.submitting : translations.workshop.submit }}
+      </button>
     </form>
   </section>
 </div>
