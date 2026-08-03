@@ -2,6 +2,16 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'firebase',
+    pathMatch: 'full',
+  },
+  {
+    path: 'firebase',
+    loadComponent: () =>
+      import('./features/firebase-page/firebase-page').then((m) => m.FirebasePage),
+  },
+  {
     path: 'test-storage',
     loadComponent: () =>
       import('./test-storage-page/test-storage-page').then((m) => m.TestStoragePage),

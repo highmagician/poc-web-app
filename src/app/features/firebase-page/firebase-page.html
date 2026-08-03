@@ -1,0 +1,404 @@
+<div class="firebase-page-container">
+  <!-- Top Navigation / Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.89 15.672L6.48 2.593C6.549 2.239 7.009 2.14 7.219 2.433L10.35 6.84L3.89 15.672Z" fill="#FFA000"/>
+          <path d="M13.62 10.963L11.08 7.371L3.89 15.672L13.62 10.963Z" fill="#F57C00"/>
+          <path d="M3.89 15.672L11.54 20.301C11.82 20.47 12.18 20.47 12.46 20.301L20.11 15.672L13.62 10.963L3.89 15.672Z" fill="#FFCA28"/>
+          <path d="M20.11 15.672L17.52 2.593C17.45 2.239 16.99 2.14 16.78 2.433L13.62 10.963L20.11 15.672Z" fill="#FFA000"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>FirebaseUI Auth Explorer</h1>
+        <span class="badge">Angular + Firebase Web SDK</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <a routerLink="/bakery/workshop" class="btn btn-outline">
+        <span class="icon">👈</span> Bakery Workshop
+      </a>
+      <a routerLink="/test-storage" class="btn btn-outline">
+        <span class="icon">💾</span> Test Storage
+      </a>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'ui'"
+      (click)="activeTab.set('ui')"
+    >
+      <span class="tab-icon">🔐</span> FirebaseUI Auth Widget
+    </button>
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'config'"
+      (click)="activeTab.set('config')"
+    >
+      <span class="tab-icon">⚙️</span> Firebase Config
+    </button>
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'user'"
+      (click)="activeTab.set('user')"
+    >
+      <span class="tab-icon">👤</span> User Session
+      <span *ngIf="currentUser() || isMockUser()" class="dot-active"></span>
+    </button>
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'docs'"
+      (click)="activeTab.set('docs')"
+    >
+      <span class="tab-icon">📖</span> Guide & Setup
+    </button>
+  </nav>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    <!-- TAB 1: FirebaseUI Auth Widget -->
+    <section *ngIf="activeTab() === 'ui'" class="tab-pane">
+      <div class="grid-2col">
+        <!-- Widget Showcase Card -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <div>
+              <h2>FirebaseUI Web Auth Widget</h2>
+              <p class="subtitle">Drop-in UI flow for authentication</p>
+            </div>
+            <button class="btn btn-sm btn-ghost" (click)="restartUIWidget()" title="Reload Widget">
+              🔄 Reload Widget
+            </button>
+          </div>
+
+          <div class="status-banner" [class.success]="isInitialized()" [class.warning]="!isInitialized()">
+            <span class="status-dot"></span>
+            <span>{{ uiStatusMessage() }}</span>
+          </div>
+
+          <div *ngIf="isDemoConfig()" class="info-box mb-3">
+            ℹ️ <strong>Demo Config Active:</strong> Real Firebase Auth requires valid credentials from your <a href="https://console.firebase.google.com/" target="_blank" rel="noopener" style="color: #93c5fd; text-decoration: underline;">Firebase Console</a>. Enter your keys in the <strong>⚙️ Firebase Config</strong> tab, or use the <strong>Simulator Mode</strong> on the right to preview signed-in views instantly.
+          </div>
+
+          <!-- Signed-In Banner in Widget view -->
+          <div *ngIf="currentUser() || isMockUser()" class="signed-in-alert">
+            <div class="user-avatar-sm">
+              <img [src]="currentUser()?.photoURL || mockUser()?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'" alt="Avatar" />
+            </div>
+            <div class="signed-in-info">
+              <strong>Signed in as:</strong>
+              <span>{{ currentUser()?.email || mockUser()?.email || currentUser()?.displayName || mockUser()?.displayName }}</span>
+            </div>
+            <button class="btn btn-sm btn-danger" (click)="handleSignOut()">Sign Out</button>
+          </div>
+
+          <!-- Target Container for FirebaseUI -->
+          <div class="firebaseui-wrapper">
+            <div #authContainer id="firebaseui-auth-container"></div>
+          </div>
+        </div>
+
+        <!-- Customization Controls Panel -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Live UI Options</h3>
+            <span class="hint-tag">Toggle & Apply</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Sign-In Flow Mode</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="flow" value="popup" [ngModel]="signInFlow()" (ngModelChange)="signInFlow.set($event); restartUIWidget()" />
+                <span>Popup (Modal)</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="flow" value="redirect" [ngModel]="signInFlow()" (ngModelChange)="signInFlow.set($event); restartUIWidget()" />
+                <span>Redirect</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Auth Providers</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-label">
+                <input type="checkbox" [ngModel]="enableEmail()" (ngModelChange)="enableEmail.set($event); restartUIWidget()" />
+                <span>Email / Password</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" [ngModel]="enableGoogle()" (ngModelChange)="enableGoogle.set($event); restartUIWidget()" />
+                <span>Google Sign-In</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" [ngModel]="enablePhone()" (ngModelChange)="enablePhone.set($event); restartUIWidget()" />
+                <span>Phone Auth</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" [ngModel]="enableAnonymous()" (ngModelChange)="enableAnonymous.set($event); restartUIWidget()" />
+                <span>Anonymous Guest</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" [ngModel]="enableGithub()" (ngModelChange)="enableGithub.set($event); restartUIWidget()" />
+                <span>GitHub OAuth</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Auth Settings</label>
+            <label class="checkbox-label">
+              <input type="checkbox" [ngModel]="requireDisplayName()" (ngModelChange)="requireDisplayName.set($event); restartUIWidget()" />
+              <span>Require Display Name on Registration</span>
+            </label>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Quick Mock User Tester -->
+          <div class="mock-tester">
+            <h4>Simulator / Demo Mode</h4>
+            <p class="small-text">Quickly test signed-in view without real Firebase Auth credentials:</p>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-primary" (click)="setMockSignedInUser('google')">
+                Simulate Google Login
+              </button>
+              <button class="btn btn-sm btn-secondary" (click)="setMockSignedInUser('email')">
+                Simulate Email Login
+              </button>
+              <button class="btn btn-sm btn-dark" (click)="setMockSignedInUser('github')">
+                Simulate GitHub Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Firebase Configuration -->
+    <section *ngIf="activeTab() === 'config'" class="tab-pane">
+      <div class="card glass-card max-w-700">
+        <div class="card-header">
+          <div>
+            <h2>Firebase Credentials Configuration</h2>
+            <p class="subtitle">Connect your own Firebase project or use local demo config</p>
+          </div>
+          <button class="btn btn-sm btn-secondary" (click)="resetConfigToDemo()">
+            Reset to Demo
+          </button>
+        </div>
+
+        <form (ngSubmit)="saveConfig()" class="config-form">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">API Key (apiKey)</label>
+              <input type="text" class="input-field" [(ngModel)]="config().apiKey" name="apiKey" placeholder="AIzaSy..." />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">Auth Domain (authDomain)</label>
+              <input type="text" class="input-field" [(ngModel)]="config().authDomain" name="authDomain" placeholder="my-app.firebaseapp.com" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">Project ID (projectId)</label>
+              <input type="text" class="input-field" [(ngModel)]="config().projectId" name="projectId" placeholder="my-app-id" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">Storage Bucket (storageBucket)</label>
+              <input type="text" class="input-field" [(ngModel)]="config().storageBucket" name="storageBucket" placeholder="my-app.appspot.com" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label">Messaging Sender ID</label>
+              <input type="text" class="input-field" [(ngModel)]="config().messagingSenderId" name="messagingSenderId" placeholder="123456789" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label">App ID (appId)</label>
+              <input type="text" class="input-field" [(ngModel)]="config().appId" name="appId" placeholder="1:12345:web:abcdef" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              💾 Save & Re-initialize Firebase
+            </button>
+          </div>
+        </form>
+
+        <div class="info-box">
+          💡 <strong>Tip:</strong> Config saved here is stored in your browser's <code>localStorage</code>. Make sure your Firebase Console has added <code>localhost</code> and your GitHub Pages domain (e.g. <code>*.github.io</code>) to Authorized Domains in Firebase Auth settings.
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: User Session & Profile -->
+    <section *ngIf="activeTab() === 'user'" class="tab-pane">
+      <div *ngIf="!currentUser() && !isMockUser()" class="card glass-card text-center py-5">
+        <div class="empty-state">
+          <span class="empty-icon">👤</span>
+          <h3>No User Signed In</h3>
+          <p>Go to the <strong>FirebaseUI Auth Widget</strong> tab to sign in or test simulated sign-in.</p>
+          <button class="btn btn-primary mt-3" (click)="activeTab.set('ui')">
+            Go to FirebaseUI Widget
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="currentUser() || isMockUser()" class="grid-2col">
+        <!-- User Profile Card -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Active User Details</h3>
+            <span class="badge" [class.badge-mock]="isMockUser()" [class.badge-live]="!isMockUser()">
+              {{ isMockUser() ? 'Mock Session' : 'Live Firebase Auth' }}
+            </span>
+          </div>
+
+          <div class="profile-header">
+            <img [src]="currentUser()?.photoURL || mockUser()?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=User'" alt="Avatar" class="profile-avatar" />
+            <div class="profile-meta">
+              <h2>{{ currentUser()?.displayName || mockUser()?.displayName || 'Anonymous User' }}</h2>
+              <span class="user-email">{{ currentUser()?.email || mockUser()?.email || 'No email provided' }}</span>
+              <div class="status-tags">
+                <span class="tag" [class.tag-verified]="currentUser()?.emailVerified || mockUser()?.emailVerified">
+                  {{ (currentUser()?.emailVerified || mockUser()?.emailVerified) ? '✓ Email Verified' : 'Unverified Email' }}
+                </span>
+                <span class="tag tag-provider">
+                  Provider: {{ currentUser()?.providerData?.[0]?.providerId || mockUser()?.providerId || 'firebase' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-list">
+            <div class="detail-item">
+              <span class="label">User UID:</span>
+              <code class="code-val">{{ currentUser()?.uid || mockUser()?.uid }}</code>
+              <button class="btn-copy" (click)="copyToClipboard(currentUser()?.uid || mockUser()?.uid || '')">📋</button>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Creation Time:</span>
+              <span class="val">{{ currentUser()?.metadata?.creationTime || 'Just now (Demo)' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="label">Last Sign In:</span>
+              <span class="val">{{ currentUser()?.metadata?.lastSignInTime || 'Just now (Demo)' }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-danger" (click)="handleSignOut()">
+              Sign Out Session
+            </button>
+          </div>
+        </div>
+
+        <!-- Token Inspector -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3>Firebase ID Token</h3>
+            <button class="btn btn-sm btn-outline" (click)="copyToClipboard(rawIdToken())" [disabled]="!rawIdToken()">
+              📋 Copy Token
+            </button>
+          </div>
+
+          <div class="token-container">
+            <textarea class="token-textarea" readonly [value]="rawIdToken() || 'No token available'"></textarea>
+          </div>
+          <p class="small-text">This JWT token can be sent in the <code>Authorization: Bearer</code> header to your backend API to authenticate calls.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Integration Guide -->
+    <section *ngIf="activeTab() === 'docs'" class="tab-pane">
+      <div class="card glass-card">
+        <div class="card-header">
+          <h2>FirebaseUI Web Integration Guide</h2>
+        </div>
+
+        <div class="docs-content" ngNonBindable>
+          <h3>1. Installation</h3>
+          <pre class="code-block"><code>npm install firebase firebaseui</code></pre>
+
+          <h3>2. Load FirebaseUI CSS</h3>
+          <p>In <code>src/styles.scss</code>:</p>
+          <pre class="code-block"><code>&#64;import 'firebaseui/dist/firebaseui.css';</code></pre>
+
+          <h3>3. Component Integration Example</h3>
+          <pre class="code-block"><code>import &#123; Component, ElementRef, ViewChild, AfterViewInit &#125; from '&#64;angular/core';
+import &#123; initializeApp &#125; from 'firebase/app';
+import &#123; getAuth, EmailAuthProvider, GoogleAuthProvider &#125; from 'firebase/auth';
+import * as firebaseui from 'firebaseui';
+
+&#64;Component(&#123;
+  selector: 'app-login',
+  template: `&lt;div #authContainer id="firebaseui-auth-container"&gt;&lt;/div&gt;`
+&#125;)
+export class LoginComponent implements AfterViewInit &#123;
+  &#64;ViewChild('authContainer') authContainer!: ElementRef;
+
+  ngAfterViewInit() &#123;
+    const app = initializeApp(&#123; apiKey: '...', authDomain: '...' &#125;);
+    const auth = getAuth(app);
+
+    const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
+    ui.start(this.authContainer.nativeElement, &#123;
+      signInFlow: 'popup',
+      signInOptions: [
+        EmailAuthProvider.PROVIDER_ID,
+        GoogleAuthProvider.PROVIDER_ID
+      ],
+      callbacks: &#123;
+        signInSuccessWithAuthResult: (authResult) =&gt; &#123;
+          console.log('User logged in:', authResult.user);
+          return false;
+        &#125;
+      &#125;
+    &#125;);
+  &#125;
+&#125;</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event Logs Console (Always visible at bottom) -->
+    <section class="logs-card card glass-card mt-4">
+      <div class="card-header py-2">
+        <div class="flex-align-center gap-2">
+          <h4>Activity & Event Console</h4>
+          <span class="log-count">({{ eventLogs().length }} logs)</span>
+        </div>
+        <button class="btn btn-xs btn-ghost" (click)="clearLogs()">Clear Console</button>
+      </div>
+
+      <div class="log-stream">
+        <div *ngFor="let log of eventLogs()" class="log-item" [class]="'log-' + log.type">
+          <span class="log-time">[{{ log.timestamp }}]</span>
+          <span class="log-type-badge">{{ log.type.toUpperCase() }}</span>
+          <span class="log-msg">{{ log.message }}</span>
+        </div>
+        <div *ngIf="eventLogs().length === 0" class="empty-logs">
+          No events recorded yet.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

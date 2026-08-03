@@ -54,13 +54,19 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Deployment (GitHub Pages)
+## Deployment (Firebase Hosting)
 
-This app deploys automatically to GitHub Pages via the workflow in `.github/workflows/deploy.yml` on every push to `main`. The workflow builds with `--base-href /poc-web-app/` and publishes `dist/poc-web-app/browser`.
+This app deploys automatically to Firebase Hosting via the workflow in `.github/workflows/firebase-hosting.yml` on every push to `main`. The workflow builds with `ng build --configuration production` (served from the site root, so no `--base-href` override) and publishes `dist/poc-web-app/browser`.
 
-The site is served from `https://highmagician.github.io/poc-web-app/`.
+Hosting behaviour is defined in `firebase.json` (SPA rewrite of all routes to `/index.html`, plus cache headers). The target project is set in `.firebaserc`.
 
-One-time repo setup (via GitHub UI, Settings → Pages): set **Source** to **GitHub Actions**.
+### One-time setup
+
+1. Create/select a Firebase project and replace `<YOUR_FIREBASE_PROJECT_ID>` in both `.firebaserc` and `.github/workflows/firebase-hosting.yml`.
+2. Create a service account with the **Firebase Hosting Admin** role and add its JSON key as the `FIREBASE_SERVICE_ACCOUNT` secret in the GitHub repo (Settings → Secrets and variables → Actions). Do **not** commit the key to the repo.
+3. (Optional, local deploys) Install the CLI with `npm i -g firebase-tools`, then `firebase login` and `firebase deploy --only hosting`.
+
+The site is served from `https://<YOUR_FIREBASE_PROJECT_ID>.web.app/`.
 
 ## Additional Resources
 
