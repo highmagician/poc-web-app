@@ -92,6 +92,8 @@ export interface Translations {
   admin: {
     title: string;
     subtitle: string;
+    bankAppsTitle: string;
+    bankAppsHint: string;
     emptyTitle: string;
     emptyMessage: string;
     backToWorkshop: string;
@@ -220,6 +222,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     admin: {
       title: 'Workshop applications',
       subtitle: 'All course applications submitted through the apply form',
+      bankAppsTitle: 'Open a mobile banking app',
+      bankAppsHint: 'Opens on mobile only if the app is installed on the device.',
       emptyTitle: 'No applications yet',
       emptyMessage: 'Submitted applications will show up here.',
       backToWorkshop: 'Back to workshop page',
@@ -346,6 +350,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',
       subtitle: 'ใบสมัครคอร์สทั้งหมดที่ส่งผ่านแบบฟอร์มสมัคร',
+      bankAppsTitle: 'เปิดแอปโมบายแบงก์กิ้ง',
+      bankAppsHint: 'จะเปิดได้เมื่อใช้งานบนมือถือและติดตั้งแอปนั้นไว้แล้วเท่านั้น',
       emptyTitle: 'ยังไม่มีใบสมัคร',
       emptyMessage: 'ใบสมัครที่ส่งเข้ามาจะแสดงที่นี่',
       backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
