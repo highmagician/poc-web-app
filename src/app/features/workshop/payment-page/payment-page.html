@@ -11,9 +11,15 @@
     </section>
   } @else if (reference()) {
     <section class="success-state">
-      <div class="success-icon">✅</div>
-      <h1>{{ translations.payment.successTitle }}</h1>
-      <p>{{ translations.payment.successMessage }}</p>
+      @if (submittedMethod() === 'card') {
+        <div class="success-icon">✅</div>
+        <h1>{{ translations.payment.successTitle }}</h1>
+        <p>{{ translations.payment.successMessage }}</p>
+      } @else {
+        <div class="success-icon">🕓</div>
+        <h1>{{ translations.payment.reviewTitle }}</h1>
+        <p>{{ translations.payment.reviewMessage }}</p>
+      }
       <div class="reference-card">
         <span>{{ translations.payment.referenceLabel }}</span>
         <strong>{{ reference() }}</strong>
@@ -67,13 +73,33 @@
               <input type="text" formControlName="cvv" inputmode="numeric" maxlength="4" placeholder="123" />
             </label>
           </div>
-        } @else if (form.controls.method.value === 'promptpay') {
-          <div class="method-placeholder">
-            <div class="qr-placeholder">QR</div>
-          </div>
         } @else {
           <div class="method-placeholder transfer-details">
-            <p>Bangkok Bank · 123-4-56789-0 · Homie Bakery Co., Ltd.</p>
+            @if (form.controls.method.value === 'promptpay') {
+              <div class="promptpay-qr">
+                @if (promptPayQrDataUrl()) {
+                  <img [src]="promptPayQrDataUrl()" [alt]="translations.payment.promptpayQrAlt" width="200" height="200" />
+                  <p class="promptpay-amount">฿{{ total() | number }}</p>
+                } @else if (promptPayQrError()) {
+                  <p class="error">{{ translations.payment.promptpayQrError }}</p>
+                } @else {
+                  <div class="qr-placeholder">{{ translations.payment.promptpayQrLoading }}</div>
+                }
+              </div>
+            } @else {
+              <p>Bangkok Bank · 123-4-56789-0 · Homie Bakery Co., Ltd.</p>
+            }
+
+            <label class="slip-upload">
+              {{ translations.payment.slipLabel }}
+              <input type="file" accept="image/*" (change)="onSlipSelected($event)" />
+            </label>
+
+            @if (slipErrorType() === 'missing') {
+              <p class="error">{{ translations.payment.slipRequired }}</p>
+            } @else if (slipErrorType() === 'tooLarge') {
+              <p class="error">{{ translations.payment.slipTooLarge }}</p>
+            }
           </div>
         }
 

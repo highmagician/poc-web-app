@@ -6,22 +6,23 @@
   <h1>{{ translations.admin.title }}</h1>
   <p class="subtitle">{{ translations.admin.subtitle }}</p>
 
-  <section class="bank-apps">
-    <h2>{{ translations.admin.bankAppsTitle }}</h2>
-    <div class="bank-apps__buttons">
-      @for (app of bankApps; track app.name) {
-        <button
-          type="button"
-          class="bank-app-button"
-          [style.--bank-color]="app.color"
-          (click)="openBankApp(app)"
-        >
-          <span class="bank-app-button__name">{{ app.name }}</span>
-          <span class="bank-app-button__bank">{{ app.bankTh }}</span>
-        </button>
+  <section class="settings-card">
+    <h2>{{ translations.admin.settings.title }}</h2>
+    <form [formGroup]="promptPayForm" (ngSubmit)="savePromptPaySettings()" novalidate>
+      <label>
+        {{ translations.admin.settings.promptpayIdLabel }}
+        <input type="text" formControlName="promptPayId" inputmode="numeric" maxlength="15" />
+      </label>
+      <p class="hint">{{ translations.admin.settings.promptpayIdHint }}</p>
+
+      @if (promptPayInvalid()) {
+        <p class="error">{{ translations.admin.settings.invalidFormat }}</p>
+      } @else if (promptPaySaved()) {
+        <p class="saved">{{ translations.admin.settings.savedMessage }}</p>
       }
-    </div>
-    <p class="bank-apps__hint">{{ translations.admin.bankAppsHint }}</p>
+
+      <button type="submit" class="primary-button">{{ translations.admin.settings.saveButton }}</button>
+    </form>
   </section>
 
   @if (loadError()) {
@@ -48,6 +49,7 @@
             <th>{{ translations.admin.columns.participants }}</th>
             <th>{{ translations.admin.columns.method }}</th>
             <th>{{ translations.admin.columns.total }}</th>
+            <th>{{ translations.admin.columns.slip }}</th>
             <th>{{ translations.admin.columns.status }}</th>
             <th>{{ translations.admin.columns.actions }}</th>
           </tr>
@@ -67,8 +69,23 @@
               <td>{{ application.participants }}</td>
               <td>{{ application.paymentMethod || '—' }}</td>
               <td class="total">{{ application.totalThb ? '฿' + (application.totalThb | number) : '—' }}</td>
-              <td>{{ translations.admin.statusLabels[application.status] }}</td>
               <td>
+                @if (application.slipUrl) {
+                  <a [href]="application.slipUrl" target="_blank" rel="noopener">{{ translations.admin.downloadSlip }}</a>
+                } @else {
+                  —
+                }
+              </td>
+              <td>{{ translations.admin.statusLabels[application.status] }}</td>
+              <td class="actions-cell">
+                @if (application.status === 'review') {
+                  <button type="button" class="approve-button" (click)="approveOrder(application.id)">
+                    {{ translations.admin.approveButton }}
+                  </button>
+                  <button type="button" class="reject-button" (click)="rejectOrder(application.id)">
+                    {{ translations.admin.rejectButton }}
+                  </button>
+                }
                 <button type="button" class="cancel-button" (click)="cancelOrder(application.id)">
                   {{ translations.admin.cancelButton }}
                 </button>

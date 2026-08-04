@@ -129,8 +129,8 @@ h2 {
   text-align: center;
 
   .qr-placeholder {
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -140,11 +140,48 @@ h2 {
     border-radius: 12px;
     font-weight: 700;
     color: #a88a6f;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .promptpay-qr {
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 200px;
+      height: 200px;
+      background: #fff;
+      border: 1px solid #f0e0cc;
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+  }
+
+  .promptpay-amount {
+    margin: 0.75rem 0 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #b8541c;
   }
 
   &.transfer-details p {
     color: #6b5442;
     font-size: 0.9rem;
+  }
+
+  .slip-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #6b5442;
+    text-align: left;
+  }
+
+  .error {
+    text-align: left;
   }
 }
 

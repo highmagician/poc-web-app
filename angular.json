@@ -38,7 +38,9 @@
             "allowedCommonJsDependencies": [
               "firebaseui",
               "dialog-polyfill",
-              "material-design-lite"
+              "material-design-lite",
+              "promptpay-qr",
+              "qrcode"
             ]
           },
           "configurations": {

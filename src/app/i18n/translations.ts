@@ -86,22 +86,41 @@ export interface Translations {
     emptyCta: string;
     successTitle: string;
     successMessage: string;
+    reviewTitle: string;
+    reviewMessage: string;
     referenceLabel: string;
     backHome: string;
+    slipLabel: string;
+    slipRequired: string;
+    slipTooLarge: string;
+    promptpayQrAlt: string;
+    promptpayQrLoading: string;
+    promptpayQrError: string;
   };
   admin: {
     title: string;
     subtitle: string;
-    bankAppsTitle: string;
-    bankAppsHint: string;
     emptyTitle: string;
     emptyMessage: string;
     backToWorkshop: string;
     cancelButton: string;
     cancelConfirm: string;
+    approveButton: string;
+    rejectButton: string;
+    rejectConfirm: string;
+    downloadSlip: string;
     loadError: string;
+    settings: {
+      title: string;
+      promptpayIdLabel: string;
+      promptpayIdHint: string;
+      saveButton: string;
+      savedMessage: string;
+      invalidFormat: string;
+    };
     statusLabels: {
       pending: string;
+      review: string;
       paid: string;
     };
     columns: {
@@ -114,6 +133,7 @@ export interface Translations {
       participants: string;
       method: string;
       total: string;
+      slip: string;
       status: string;
       actions: string;
     };
@@ -216,22 +236,41 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       emptyCta: 'Go to workshop page',
       successTitle: 'Payment received, see you in the kitchen!',
       successMessage: "We've sent a confirmation to your email with the class details.",
+      reviewTitle: "We've received your slip",
+      reviewMessage: "Our team will verify your transfer shortly. We'll email you once it's confirmed.",
       referenceLabel: 'Booking reference',
       backHome: 'Back to workshop page',
+      slipLabel: 'Upload your transfer slip',
+      slipRequired: 'Please upload your transfer slip to continue.',
+      slipTooLarge: 'That file is too large. Please upload an image under 8MB.',
+      promptpayQrAlt: 'PromptPay QR code',
+      promptpayQrLoading: 'Generating QR…',
+      promptpayQrError: "Couldn't generate the QR code. Please try again.",
     },
     admin: {
       title: 'Workshop applications',
       subtitle: 'All course applications submitted through the apply form',
-      bankAppsTitle: 'Open a mobile banking app',
-      bankAppsHint: 'Opens on mobile only if the app is installed on the device.',
       emptyTitle: 'No applications yet',
       emptyMessage: 'Submitted applications will show up here.',
       backToWorkshop: 'Back to workshop page',
       cancelButton: 'Cancel booking',
       cancelConfirm: 'Cancel this booking? This cannot be undone.',
+      approveButton: 'Approve',
+      rejectButton: 'Reject',
+      rejectConfirm: 'Reject this slip? The applicant will need to submit payment again.',
+      downloadSlip: 'View slip',
       loadError: "Couldn't load applications. Please try again.",
+      settings: {
+        title: 'PromptPay settings',
+        promptpayIdLabel: 'PromptPay ID',
+        promptpayIdHint: 'Phone number (10 digits), citizen/tax ID (13 digits), or e-Wallet ID (15 digits).',
+        saveButton: 'Save',
+        savedMessage: 'Saved. New PromptPay QR codes will use this ID.',
+        invalidFormat: 'Enter a valid 10, 13, or 15-digit PromptPay ID with no spaces or dashes.',
+      },
       statusLabels: {
         pending: 'Pending payment',
+        review: 'Awaiting slip review',
         paid: 'Paid',
       },
       columns: {
@@ -244,6 +283,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'Participants',
         method: 'Payment method',
         total: 'Total',
+        slip: 'Slip',
         status: 'Status',
         actions: 'Actions',
       },
@@ -344,22 +384,41 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       emptyCta: 'ไปที่หน้าเวิร์กช็อป',
       successTitle: 'ชำระเงินสำเร็จ แล้วเจอกันในครัวนะ!',
       successMessage: 'เราได้ส่งอีเมลยืนยันพร้อมรายละเอียดคลาสไปให้คุณแล้ว',
+      reviewTitle: 'เราได้รับสลิปของคุณแล้ว',
+      reviewMessage: 'ทีมงานจะตรวจสอบการโอนเงินของคุณและอีเมลแจ้งผลให้ทราบเร็วๆ นี้',
       referenceLabel: 'หมายเลขอ้างอิงการจอง',
       backHome: 'กลับไปหน้าเวิร์กช็อป',
+      slipLabel: 'อัปโหลดสลิปการโอนเงิน',
+      slipRequired: 'กรุณาอัปโหลดสลิปการโอนเงินเพื่อดำเนินการต่อ',
+      slipTooLarge: 'ไฟล์มีขนาดใหญ่เกินไป กรุณาอัปโหลดรูปภาพขนาดไม่เกิน 8MB',
+      promptpayQrAlt: 'คิวอาร์โค้ดพร้อมเพย์',
+      promptpayQrLoading: 'กำลังสร้างคิวอาร์โค้ด...',
+      promptpayQrError: 'ไม่สามารถสร้างคิวอาร์โค้ดได้ กรุณาลองใหม่อีกครั้ง',
     },
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',
       subtitle: 'ใบสมัครคอร์สทั้งหมดที่ส่งผ่านแบบฟอร์มสมัคร',
-      bankAppsTitle: 'เปิดแอปโมบายแบงก์กิ้ง',
-      bankAppsHint: 'จะเปิดได้เมื่อใช้งานบนมือถือและติดตั้งแอปนั้นไว้แล้วเท่านั้น',
       emptyTitle: 'ยังไม่มีใบสมัคร',
       emptyMessage: 'ใบสมัครที่ส่งเข้ามาจะแสดงที่นี่',
       backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
       cancelButton: 'ยกเลิกการจอง',
       cancelConfirm: 'ยืนยันยกเลิกการจองนี้ใช่หรือไม่ การดำเนินการนี้ไม่สามารถย้อนกลับได้',
+      approveButton: 'อนุมัติ',
+      rejectButton: 'ปฏิเสธ',
+      rejectConfirm: 'ยืนยันปฏิเสธสลิปนี้ใช่หรือไม่ ผู้สมัครจะต้องส่งการชำระเงินใหม่',
+      downloadSlip: 'ดูสลิป',
       loadError: 'ไม่สามารถโหลดรายการใบสมัครได้ กรุณาลองใหม่อีกครั้ง',
+      settings: {
+        title: 'ตั้งค่าพร้อมเพย์',
+        promptpayIdLabel: 'หมายเลขพร้อมเพย์',
+        promptpayIdHint: 'เบอร์โทรศัพท์ (10 หลัก), เลขบัตรประชาชน/เลขผู้เสียภาษี (13 หลัก), หรือหมายเลข e-Wallet (15 หลัก)',
+        saveButton: 'บันทึก',
+        savedMessage: 'บันทึกแล้ว คิวอาร์โค้ดพร้อมเพย์ใหม่จะใช้หมายเลขนี้',
+        invalidFormat: 'กรุณากรอกหมายเลขพร้อมเพย์ที่ถูกต้อง 10, 13 หรือ 15 หลัก โดยไม่มีเว้นวรรคหรือขีด',
+      },
       statusLabels: {
         pending: 'รอชำระเงิน',
+        review: 'รอตรวจสอบสลิป',
         paid: 'ชำระเงินแล้ว',
       },
       columns: {
@@ -372,6 +431,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         participants: 'จำนวนผู้เข้าร่วม',
         method: 'วิธีชำระเงิน',
         total: 'ยอดรวม',
+        slip: 'สลิป',
         status: 'สถานะ',
         actions: 'การจัดการ',
       },

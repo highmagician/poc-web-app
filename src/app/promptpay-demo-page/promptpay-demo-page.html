@@ -1,0 +1,47 @@
+<header>
+  <h1>PromptPay QR generator (POC)</h1>
+  <p>Standalone playground for generating a PromptPay QR slip image from an ID, amount, and description.</p>
+</header>
+
+<main>
+  <label>
+    PromptPay ID
+    <input
+      type="text"
+      inputmode="numeric"
+      maxlength="15"
+      [ngModel]="promptPayId()"
+      (ngModelChange)="onPromptPayIdChange($event)"
+    />
+  </label>
+  <p class="hint">10-digit phone, 13-digit citizen/tax ID, or 15-digit e-Wallet ID.</p>
+
+  <label>
+    Amount (THB, optional)
+    <input type="number" min="0" step="0.01" [ngModel]="amount()" (ngModelChange)="onAmountChange($event)" />
+  </label>
+
+  <label>
+    Description
+    <input
+      type="text"
+      maxlength="80"
+      placeholder="e.g. Workshop deposit"
+      [ngModel]="description()"
+      (ngModelChange)="onDescriptionChange($event)"
+    />
+  </label>
+
+  @if (qrError()) {
+    <p class="error">{{ qrError() }}</p>
+  } @else if (slipError()) {
+    <p class="error">{{ slipError() }}</p>
+  } @else if (slipDataUrl()) {
+    <img [src]="slipDataUrl()" alt="PromptPay payment slip" width="480" />
+    <a class="download-link" [href]="slipDataUrl()" download="promptpay-slip.png">Download image</a>
+  } @else {
+    <p class="hint">Generating…</p>
+  }
+
+  <p><a routerLink="/bakery/workshop">Visit the Homie Bakery workshop page →</a></p>
+</main>
