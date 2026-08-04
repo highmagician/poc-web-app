@@ -9,6 +9,17 @@ import { getWorkshopCourseById } from '../workshop-courses';
 import { WorkshopApplicationsService, PaymentMethod } from '../workshop-applications.service';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
+const MAX_SLIP_BYTES = 8 * 1024 * 1024;
+
+function readFileAsBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve((reader.result as string).split(',')[1] ?? '');
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
 @Component({
   selector: 'app-payment-page',
   imports: [RouterLink, DecimalPipe, ReactiveFormsModule, TopBar],
@@ -26,6 +37,10 @@ export class PaymentPage {
   protected readonly reference = this.applicationService.reference;
   protected readonly processing = signal(false);
   protected readonly submitError = signal(false);
+  protected readonly slipErrorType = signal<'missing' | 'tooLarge' | null>(null);
+  protected readonly submittedMethod = signal<PaymentMethod | null>(null);
+
+  private slipFile: File | null = null;
 
   protected readonly course = computed(() => {
     const draft = this.draft();
@@ -50,6 +65,21 @@ export class PaymentPage {
     this.form.controls.method.setValue(method);
   }
 
+  protected onSlipSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (file && file.size > MAX_SLIP_BYTES) {
+      this.slipFile = null;
+      input.value = '';
+      this.slipErrorType.set('tooLarge');
+      return;
+    }
+
+    this.slipFile = file;
+    this.slipErrorType.set(null);
+  }
+
   protected async pay(): Promise<void> {
     const method = this.form.controls.method.value;
 
@@ -59,6 +89,9 @@ export class PaymentPage {
         this.form.markAllAsTouched();
         return;
       }
+    } else if (!this.slipFile) {
+      this.slipErrorType.set('missing');
+      return;
     }
 
     const draft = this.draft();
@@ -68,16 +101,29 @@ export class PaymentPage {
     }
 
     this.submitError.set(false);
+    this.slipErrorType.set(null);
     this.processing.set(true);
 
     const reference = this.applicationService.generateReference();
 
     try {
-      await this.applicationsApi.completePayment(draft.id, {
-        paymentMethod: method,
-        totalThb: this.total(),
-        reference,
-      });
+      if (method === 'card') {
+        await this.applicationsApi.completePayment(draft.id, {
+          paymentMethod: method,
+          totalThb: this.total(),
+          reference,
+        });
+      } else {
+        const slipBase64 = await readFileAsBase64(this.slipFile!);
+        await this.applicationsApi.uploadSlip(draft.id, {
+          paymentMethod: method,
+          totalThb: this.total(),
+          reference,
+          slipBase64,
+          slipMimeType: this.slipFile!.type,
+        });
+      }
+      this.submittedMethod.set(method);
       this.applicationService.confirmPayment(reference);
     } catch {
       this.submitError.set(true);

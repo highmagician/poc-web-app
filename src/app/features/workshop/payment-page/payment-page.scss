@@ -146,6 +146,20 @@ h2 {
     color: #6b5442;
     font-size: 0.9rem;
   }
+
+  .slip-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #6b5442;
+    text-align: left;
+  }
+
+  .error {
+    text-align: left;
+  }
 }
 
 .actions {
