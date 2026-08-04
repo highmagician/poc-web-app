@@ -8,6 +8,13 @@ import { getWorkshopCourseById } from '../workshop-courses';
 import { formatTimestamp } from '../../../shared/format-date';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
+interface BankApp {
+  name: string;
+  bankTh: string;
+  scheme: string;
+  color: string;
+}
+
 @Component({
   selector: 'app-admin-page',
   imports: [RouterLink, DecimalPipe, TopBar],
@@ -23,8 +30,20 @@ export class AdminPage {
   protected readonly loading = signal(true);
   protected readonly loadError = signal(false);
 
+  protected readonly bankApps: BankApp[] = [
+    { name: 'K PLUS', bankTh: 'กสิกรไทย', scheme: 'kplus://', color: '#138f2d' },
+    { name: 'SCB EASY', bankTh: 'ไทยพาณิชย์', scheme: 'scbeasy://', color: '#4e2a84' },
+    { name: 'Krungthai NEXT', bankTh: 'กรุงไทย', scheme: 'ktbnext://', color: '#00a4e4' },
+    { name: 'CIMB THAI', bankTh: 'ซีไอเอ็มบี ไทย', scheme: 'cimbthai://', color: '#7a1e2b' },
+    { name: 'KMA Krungsri', bankTh: 'กรุงศรี', scheme: 'kma://', color: '#c89000' },
+  ];
+
   constructor() {
     this.refresh();
+  }
+
+  protected openBankApp(scheme: string): void {
+    window.location.href = scheme;
   }
 
   protected formatTimestamp(iso: string): string {
