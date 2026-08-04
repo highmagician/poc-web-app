@@ -24,61 +24,71 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
-.bank-apps {
+.settings-card {
   background: #fff;
   border: 1px solid #f0e0cc;
   border-radius: 16px;
-  padding: 1.25rem 1.25rem 1rem;
+  padding: 1.25rem 1.5rem;
   margin-bottom: 1.5rem;
+  max-width: 420px;
 
   h2 {
-    font-size: 1.1rem;
-    margin: 0 0 1rem;
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    color: #8a6a4e;
   }
-}
 
-.bank-apps__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.bank-apps__hint {
-  color: #a88a6f;
-  font-size: 0.78rem;
-  margin: 0.9rem 0 0;
-}
-
-.bank-app-button {
-  --bank-color: #e07a3f;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.15rem;
-  min-width: 150px;
-  border: 1px solid var(--bank-color);
-  border-left: 4px solid var(--bank-color);
-  background: #fff;
-  color: #4a2f22;
-  border-radius: 12px;
-  padding: 0.65rem 1rem;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-
-  &:hover {
-    background: var(--bank-color);
-    color: #fff;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
-}
 
-.bank-app-button__name {
-  font-weight: 700;
-  font-size: 0.95rem;
-}
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #6b5442;
+  }
 
-.bank-app-button__bank {
-  font-size: 0.78rem;
-  opacity: 0.85;
+  input {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #e0cbb0;
+    border-radius: 10px;
+    background: #fffdfa;
+    color: #4a2f22;
+
+    &:focus {
+      outline: 2px solid #e07a3f;
+      outline-offset: 1px;
+    }
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #a88a6f;
+  }
+
+  .error {
+    margin: 0;
+    color: #c23434;
+    font-size: 0.78rem;
+  }
+
+  .saved {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #2f8f4e;
+  }
+
+  button {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
 }
 
 .table-wrapper {
@@ -156,6 +166,41 @@ tr:last-child td {
 }
 
 .cancel-button {
+  border: 1px solid #c23434;
+  background: transparent;
+  color: #c23434;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: #c23434;
+    color: #fff;
+  }
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approve-button {
+  border: 1px solid #2f8f4e;
+  background: transparent;
+  color: #2f8f4e;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: #2f8f4e;
+    color: #fff;
+  }
+}
+
+.reject-button {
   border: 1px solid #c23434;
   background: transparent;
   color: #c23434;

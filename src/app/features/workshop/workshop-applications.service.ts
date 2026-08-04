@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { WORKSHOP_API_URL } from './workshop-api.config';
 
-export type ApplicationStatus = 'pending' | 'paid';
+export type ApplicationStatus = 'pending' | 'review' | 'paid';
 export type PaymentMethod = 'card' | 'promptpay' | 'transfer';
 
 export interface WorkshopApplication {
@@ -22,6 +22,7 @@ export interface WorkshopApplication {
   paymentMethod: PaymentMethod | '';
   totalThb: number | '';
   reference: string;
+  slipUrl: string;
 }
 
 export interface CreateApplicationInput {
@@ -38,6 +39,14 @@ export interface CompletePaymentInput {
   paymentMethod: PaymentMethod;
   totalThb: number;
   reference: string;
+}
+
+export interface UploadSlipInput {
+  paymentMethod: PaymentMethod;
+  totalThb: number;
+  reference: string;
+  slipBase64: string;
+  slipMimeType: string;
 }
 
 // A text/plain content type keeps the browser from sending a CORS preflight (OPTIONS) request,
@@ -107,5 +116,48 @@ export class WorkshopApplicationsService {
         ),
       ),
     );
+  }
+
+  async uploadSlip(id: string, data: UploadSlipInput): Promise<WorkshopApplication> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.post<ApiEnvelope & { application: WorkshopApplication }>(
+          WORKSHOP_API_URL,
+          JSON.stringify({ action: 'uploadSlip', id, data }),
+          { headers: TEXT_PLAIN_HEADERS },
+        ),
+      ),
+    );
+    return response.application;
+  }
+
+  async approve(id: string): Promise<WorkshopApplication> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.post<ApiEnvelope & { application: WorkshopApplication }>(
+          WORKSHOP_API_URL,
+          JSON.stringify({ action: 'update', id, data: { status: 'paid' } }),
+          { headers: TEXT_PLAIN_HEADERS },
+        ),
+      ),
+    );
+    return response.application;
+  }
+
+  async reject(id: string): Promise<WorkshopApplication> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.post<ApiEnvelope & { application: WorkshopApplication }>(
+          WORKSHOP_API_URL,
+          JSON.stringify({
+            action: 'update',
+            id,
+            data: { status: 'pending', slipFileId: '', slipUrl: '' },
+          }),
+          { headers: TEXT_PLAIN_HEADERS },
+        ),
+      ),
+    );
+    return response.application;
   }
 }
