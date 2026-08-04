@@ -76,7 +76,16 @@
         } @else {
           <div class="method-placeholder transfer-details">
             @if (form.controls.method.value === 'promptpay') {
-              <div class="qr-placeholder">QR</div>
+              <div class="promptpay-qr">
+                @if (promptPayQrDataUrl()) {
+                  <img [src]="promptPayQrDataUrl()" [alt]="translations.payment.promptpayQrAlt" width="200" height="200" />
+                  <p class="promptpay-amount">฿{{ total() | number }}</p>
+                } @else if (promptPayQrError()) {
+                  <p class="error">{{ translations.payment.promptpayQrError }}</p>
+                } @else {
+                  <div class="qr-placeholder">{{ translations.payment.promptpayQrLoading }}</div>
+                }
+              </div>
             } @else {
               <p>Bangkok Bank · 123-4-56789-0 · Homie Bakery Co., Ltd.</p>
             }

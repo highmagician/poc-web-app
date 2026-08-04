@@ -24,6 +24,73 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
+.settings-card {
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  max-width: 420px;
+
+  h2 {
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    color: #8a6a4e;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #6b5442;
+  }
+
+  input {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #e0cbb0;
+    border-radius: 10px;
+    background: #fffdfa;
+    color: #4a2f22;
+
+    &:focus {
+      outline: 2px solid #e07a3f;
+      outline-offset: 1px;
+    }
+  }
+
+  .hint {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #a88a6f;
+  }
+
+  .error {
+    margin: 0;
+    color: #c23434;
+    font-size: 0.78rem;
+  }
+
+  .saved {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #2f8f4e;
+  }
+
+  button {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
+}
+
 .table-wrapper {
   background: #fff;
   border: 1px solid #f0e0cc;

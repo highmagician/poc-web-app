@@ -17,6 +17,11 @@ export const routes: Routes = [
       import('./test-storage-page/test-storage-page').then((m) => m.TestStoragePage),
   },
   {
+    path: 'promptpay-demo',
+    loadComponent: () =>
+      import('./promptpay-demo-page/promptpay-demo-page').then((m) => m.PromptPayDemoPage),
+  },
+  {
     path: 'bakery/workshop',
     loadComponent: () =>
       import('./features/workshop/workshop-page/workshop-page').then((m) => m.WorkshopPage),

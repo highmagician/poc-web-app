@@ -93,6 +93,9 @@ export interface Translations {
     slipLabel: string;
     slipRequired: string;
     slipTooLarge: string;
+    promptpayQrAlt: string;
+    promptpayQrLoading: string;
+    promptpayQrError: string;
   };
   admin: {
     title: string;
@@ -107,6 +110,14 @@ export interface Translations {
     rejectConfirm: string;
     downloadSlip: string;
     loadError: string;
+    settings: {
+      title: string;
+      promptpayIdLabel: string;
+      promptpayIdHint: string;
+      saveButton: string;
+      savedMessage: string;
+      invalidFormat: string;
+    };
     statusLabels: {
       pending: string;
       review: string;
@@ -232,6 +243,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slipLabel: 'Upload your transfer slip',
       slipRequired: 'Please upload your transfer slip to continue.',
       slipTooLarge: 'That file is too large. Please upload an image under 8MB.',
+      promptpayQrAlt: 'PromptPay QR code',
+      promptpayQrLoading: 'Generating QR…',
+      promptpayQrError: "Couldn't generate the QR code. Please try again.",
     },
     admin: {
       title: 'Workshop applications',
@@ -246,6 +260,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       rejectConfirm: 'Reject this slip? The applicant will need to submit payment again.',
       downloadSlip: 'View slip',
       loadError: "Couldn't load applications. Please try again.",
+      settings: {
+        title: 'PromptPay settings',
+        promptpayIdLabel: 'PromptPay ID',
+        promptpayIdHint: 'Phone number (10 digits), citizen/tax ID (13 digits), or e-Wallet ID (15 digits).',
+        saveButton: 'Save',
+        savedMessage: 'Saved. New PromptPay QR codes will use this ID.',
+        invalidFormat: 'Enter a valid 10, 13, or 15-digit PromptPay ID with no spaces or dashes.',
+      },
       statusLabels: {
         pending: 'Pending payment',
         review: 'Awaiting slip review',
@@ -369,6 +391,9 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       slipLabel: 'อัปโหลดสลิปการโอนเงิน',
       slipRequired: 'กรุณาอัปโหลดสลิปการโอนเงินเพื่อดำเนินการต่อ',
       slipTooLarge: 'ไฟล์มีขนาดใหญ่เกินไป กรุณาอัปโหลดรูปภาพขนาดไม่เกิน 8MB',
+      promptpayQrAlt: 'คิวอาร์โค้ดพร้อมเพย์',
+      promptpayQrLoading: 'กำลังสร้างคิวอาร์โค้ด...',
+      promptpayQrError: 'ไม่สามารถสร้างคิวอาร์โค้ดได้ กรุณาลองใหม่อีกครั้ง',
     },
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',
@@ -383,6 +408,14 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       rejectConfirm: 'ยืนยันปฏิเสธสลิปนี้ใช่หรือไม่ ผู้สมัครจะต้องส่งการชำระเงินใหม่',
       downloadSlip: 'ดูสลิป',
       loadError: 'ไม่สามารถโหลดรายการใบสมัครได้ กรุณาลองใหม่อีกครั้ง',
+      settings: {
+        title: 'ตั้งค่าพร้อมเพย์',
+        promptpayIdLabel: 'หมายเลขพร้อมเพย์',
+        promptpayIdHint: 'เบอร์โทรศัพท์ (10 หลัก), เลขบัตรประชาชน/เลขผู้เสียภาษี (13 หลัก), หรือหมายเลข e-Wallet (15 หลัก)',
+        saveButton: 'บันทึก',
+        savedMessage: 'บันทึกแล้ว คิวอาร์โค้ดพร้อมเพย์ใหม่จะใช้หมายเลขนี้',
+        invalidFormat: 'กรุณากรอกหมายเลขพร้อมเพย์ที่ถูกต้อง 10, 13 หรือ 15 หลัก โดยไม่มีเว้นวรรคหรือขีด',
+      },
       statusLabels: {
         pending: 'รอชำระเงิน',
         review: 'รอตรวจสอบสลิป',

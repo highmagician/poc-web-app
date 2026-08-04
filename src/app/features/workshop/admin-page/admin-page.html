@@ -6,6 +6,25 @@
   <h1>{{ translations.admin.title }}</h1>
   <p class="subtitle">{{ translations.admin.subtitle }}</p>
 
+  <section class="settings-card">
+    <h2>{{ translations.admin.settings.title }}</h2>
+    <form [formGroup]="promptPayForm" (ngSubmit)="savePromptPaySettings()" novalidate>
+      <label>
+        {{ translations.admin.settings.promptpayIdLabel }}
+        <input type="text" formControlName="promptPayId" inputmode="numeric" maxlength="15" />
+      </label>
+      <p class="hint">{{ translations.admin.settings.promptpayIdHint }}</p>
+
+      @if (promptPayInvalid()) {
+        <p class="error">{{ translations.admin.settings.invalidFormat }}</p>
+      } @else if (promptPaySaved()) {
+        <p class="saved">{{ translations.admin.settings.savedMessage }}</p>
+      }
+
+      <button type="submit" class="primary-button">{{ translations.admin.settings.saveButton }}</button>
+    </form>
+  </section>
+
   @if (loadError()) {
     <p class="error">{{ translations.admin.loadError }}</p>
   }

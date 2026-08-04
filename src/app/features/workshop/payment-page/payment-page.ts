@@ -1,12 +1,16 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import generatePayload from 'promptpay-qr';
+import { toDataURL } from 'qrcode';
 
 import { LanguageService } from '../../../i18n/language.service';
 import { CourseApplicationService } from '../course-application.service';
 import { getWorkshopCourseById } from '../workshop-courses';
 import { WorkshopApplicationsService, PaymentMethod } from '../workshop-applications.service';
+import { PromptPayConfigService } from '../prompt-pay-config.service';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
 const MAX_SLIP_BYTES = 8 * 1024 * 1024;
@@ -30,6 +34,7 @@ export class PaymentPage {
   private readonly formBuilder = inject(FormBuilder);
   private readonly applicationService = inject(CourseApplicationService);
   private readonly applicationsApi = inject(WorkshopApplicationsService);
+  private readonly promptPayConfig = inject(PromptPayConfigService);
 
   protected readonly languageService = inject(LanguageService);
   protected readonly t = this.languageService.t;
@@ -39,6 +44,8 @@ export class PaymentPage {
   protected readonly submitError = signal(false);
   protected readonly slipErrorType = signal<'missing' | 'tooLarge' | null>(null);
   protected readonly submittedMethod = signal<PaymentMethod | null>(null);
+  protected readonly promptPayQrDataUrl = signal<string | null>(null);
+  protected readonly promptPayQrError = signal(false);
 
   private slipFile: File | null = null;
 
@@ -59,6 +66,39 @@ export class PaymentPage {
     cardNumber: [''],
     expiry: [''],
     cvv: [''],
+  });
+
+  private readonly method = toSignal(this.form.controls.method.valueChanges, {
+    initialValue: this.form.controls.method.value,
+  });
+
+  private promptPayQrRequestId = 0;
+
+  private readonly generatePromptPayQr = effect(() => {
+    const method = this.method();
+    const total = this.total();
+    const promptPayId = this.promptPayConfig.promptPayId();
+    const requestId = ++this.promptPayQrRequestId;
+
+    this.promptPayQrDataUrl.set(null);
+    this.promptPayQrError.set(false);
+
+    if (method !== 'promptpay' || !total) {
+      return;
+    }
+
+    const payload = generatePayload(promptPayId, { amount: total });
+    toDataURL(payload, { width: 240, margin: 1 })
+      .then((dataUrl) => {
+        if (requestId === this.promptPayQrRequestId) {
+          this.promptPayQrDataUrl.set(dataUrl);
+        }
+      })
+      .catch(() => {
+        if (requestId === this.promptPayQrRequestId) {
+          this.promptPayQrError.set(true);
+        }
+      });
   });
 
   protected selectMethod(method: PaymentMethod): void {
