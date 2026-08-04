@@ -9,12 +9,12 @@
   <section class="bank-apps">
     <h2>{{ translations.admin.bankAppsTitle }}</h2>
     <div class="bank-apps__buttons">
-      @for (app of bankApps; track app.scheme) {
+      @for (app of bankApps; track app.name) {
         <button
           type="button"
           class="bank-app-button"
           [style.--bank-color]="app.color"
-          (click)="openBankApp(app.scheme)"
+          (click)="openBankApp(app)"
         >
           <span class="bank-app-button__name">{{ app.name }}</span>
           <span class="bank-app-button__bank">{{ app.bankTh }}</span>
