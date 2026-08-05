@@ -56,13 +56,13 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 ## Deployment (Firebase Hosting)
 
-This app deploys automatically to Firebase Hosting via the workflow in `.github/workflows/firebase-hosting.yml` on every push to `main`. The workflow builds with `ng build --configuration production` (served from the site root, so no `--base-href` override) and publishes `dist/poc-web-app/browser`.
+This app deploys automatically to Firebase Hosting via the workflow in `.github/workflows/firebase-hosting-prod.yml` on every push to `main`. The workflow builds with `ng build --configuration production` (served from the site root, so no `--base-href` override) and publishes `dist/poc-web-app/browser`.
 
 Hosting behaviour is defined in `firebase.json` (SPA rewrite of all routes to `/index.html`, plus cache headers). The target project is set in `.firebaserc`.
 
 ### One-time setup
 
-1. Create/select a Firebase project and replace `<YOUR_FIREBASE_PROJECT_ID>` in both `.firebaserc` and `.github/workflows/firebase-hosting.yml`.
+1. Create/select a Firebase project and replace `<YOUR_FIREBASE_PROJECT_ID>` in both `.firebaserc` and `.github/workflows/firebase-hosting-prod.yml`.
 2. Create a service account with the **Firebase Hosting Admin** role and add its JSON key as the `FIREBASE_SERVICE_ACCOUNT` secret in the GitHub repo (Settings → Secrets and variables → Actions). Do **not** commit the key to the repo.
 3. (Optional, local deploys) Install the CLI with `npm i -g firebase-tools`, then `firebase login` and `firebase deploy --only hosting`.
 
