@@ -3,9 +3,12 @@
  * preview channel, which builds with `--configuration devPreview`). Swapped for
  * `environment.prod.ts` on the `production` build configuration via `fileReplacements` in
  * angular.json.
+ *
+ * workshopApiUrl is a placeholder, not a real URL — see scripts/inject-api-url.js and
+ * README.md's "Environment config" section. Never edit this file to add the real URL back in
+ * directly, and never commit it resolved.
  */
 export const environment = {
   production: false,
-  workshopApiUrl:
-    'https://script.google.com/macros/s/AKfycbxeQlweTMo5yK8cq1Rsgl4a2omuAfEcsIDgZ5PBC95zpuRIQec1eq7DLUfZLhHunHXT/exec',
+  workshopApiUrl: '__WORKSHOP_API_URL__',
 };

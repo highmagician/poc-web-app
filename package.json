@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "node scripts/inject-api-url.js dev ng serve",
+    "build": "node scripts/inject-api-url.js prod ng build",
+    "watch": "node scripts/inject-api-url.js dev ng build --watch --configuration development",
     "test": "ng test"
   },
   "prettier": {
