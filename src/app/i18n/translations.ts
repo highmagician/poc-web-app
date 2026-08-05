@@ -96,6 +96,13 @@ export interface Translations {
     promptpayQrAlt: string;
     promptpayQrLoading: string;
     promptpayQrError: string;
+    slip: {
+      targetAccount: string;
+      transferAmount: string;
+      noFixedAmount: string;
+      description: string;
+      download: string;
+    };
   };
   admin: {
     title: string;
@@ -246,6 +253,13 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       promptpayQrAlt: 'PromptPay QR code',
       promptpayQrLoading: 'Generating QR…',
       promptpayQrError: "Couldn't generate the QR code. Please try again.",
+      slip: {
+        targetAccount: 'Target account',
+        transferAmount: 'Transfer amount',
+        noFixedAmount: 'No fixed amount — enter in your banking app',
+        description: 'Description',
+        download: 'Download QR image',
+      },
     },
     admin: {
       title: 'Workshop applications',
@@ -394,6 +408,13 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       promptpayQrAlt: 'คิวอาร์โค้ดพร้อมเพย์',
       promptpayQrLoading: 'กำลังสร้างคิวอาร์โค้ด...',
       promptpayQrError: 'ไม่สามารถสร้างคิวอาร์โค้ดได้ กรุณาลองใหม่อีกครั้ง',
+      slip: {
+        targetAccount: 'บัญชีปลายทาง',
+        transferAmount: 'จำนวนเงินที่โอน',
+        noFixedAmount: 'ไม่ระบุจำนวนเงิน — กรุณากรอกในแอปธนาคาร',
+        description: 'รายละเอียด',
+        download: 'ดาวน์โหลดรูปคิวอาร์',
+      },
     },
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',

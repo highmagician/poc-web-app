@@ -148,21 +148,29 @@ h2 {
   .promptpay-qr {
     img {
       display: block;
+      max-width: 100%;
+      height: auto;
       margin: 0 auto;
-      width: 200px;
-      height: 200px;
       background: #fff;
       border: 1px solid #f0e0cc;
       border-radius: 12px;
-      padding: 0.75rem;
     }
-  }
 
-  .promptpay-amount {
-    margin: 0.75rem 0 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #b8541c;
+    .download-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid #e07a3f;
+      border-radius: 999px;
+      color: #e07a3f;
+      text-decoration: none;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: #e07a3f;
+        color: #fff;
+      }
+    }
   }
 
   &.transfer-details p {
