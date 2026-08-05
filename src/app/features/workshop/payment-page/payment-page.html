@@ -77,11 +77,13 @@
           <div class="method-placeholder transfer-details">
             @if (form.controls.method.value === 'promptpay') {
               <div class="promptpay-qr">
-                @if (promptPayQrDataUrl()) {
-                  <img [src]="promptPayQrDataUrl()" [alt]="translations.payment.promptpayQrAlt" width="200" height="200" />
-                  <p class="promptpay-amount">฿{{ total() | number }}</p>
-                } @else if (promptPayQrError()) {
+                @if (promptPayQrError() || promptPaySlipError()) {
                   <p class="error">{{ translations.payment.promptpayQrError }}</p>
+                } @else if (promptPaySlipDataUrl()) {
+                  <img [src]="promptPaySlipDataUrl()" [alt]="translations.payment.promptpayQrAlt" width="480" />
+                  <a class="download-link" [href]="promptPaySlipDataUrl()" download="promptpay-slip.png">
+                    {{ translations.payment.slip.download }}
+                  </a>
                 } @else {
                   <div class="qr-placeholder">{{ translations.payment.promptpayQrLoading }}</div>
                 }

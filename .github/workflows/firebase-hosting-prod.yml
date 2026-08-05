@@ -1,4 +1,4 @@
-name: Deploy to Firebase Hosting
+name: Deploy to Firebase Hosting (PROD)
 
 on:
   push:
@@ -11,6 +11,10 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    # Scopes vars.WORKSHOP_API_URL below to this GitHub Environment's own Variables (Settings ->
+    # Environments -> production) — see poc-apps-script's README.md "Environment config" section
+    # for the same pattern used on the backend.
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -22,7 +26,10 @@ jobs:
       - run: npm ci
 
       # Firebase Hosting serves from the site root, so no --base-href override.
-      - run: npx ng build --configuration production
+      - name: Build (production)
+        env:
+          WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
+        run: node scripts/inject-api-url.js prod npx ng build --configuration production
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
