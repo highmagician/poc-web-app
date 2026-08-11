@@ -26,9 +26,19 @@ jobs:
       - run: npm ci
 
       # Firebase Hosting serves from the site root, so no --base-href override.
+      # The FIREBASE_* vars are optional (see scripts/inject-api-url.js) — they point at the
+      # PROD Firebase project for the firebase-page demo's Auth testing, kept separate from
+      # DEV's own project (see firebase-hosting-dev.yml) so test sign-ins never land in the
+      # same Auth user pool as production.
       - name: Build (production)
         env:
           WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
+          FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ vars.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ vars.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
         run: node scripts/inject-api-url.js prod npx ng build --configuration production
 
       - uses: FirebaseExtended/action-hosting-deploy@v0

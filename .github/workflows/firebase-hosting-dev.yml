@@ -28,9 +28,18 @@ jobs:
       # Firebase Hosting serves from the site root, so no --base-href override.
       # devPreview is an optimized build (unlike the local-only "development" config) that still
       # targets the DEV Apps Script backend — see src/environments/environment.dev.ts.
+      # The FIREBASE_* vars are optional (see scripts/inject-api-url.js) — they point at a
+      # separate DEV Firebase project for the firebase-page demo's Auth testing, so test sign-ins
+      # never land in the same Auth user pool as production (see firebase-hosting-prod.yml).
       - name: Build (devPreview)
         env:
           WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
+          FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ vars.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ vars.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
         run: node scripts/inject-api-url.js dev npx ng build --configuration devPreview
 
       # Deploys to the "dev" preview channel of the same site (not the live prod channel),
