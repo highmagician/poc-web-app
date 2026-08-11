@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 'use strict';
 
-// Substitutes the __WORKSHOP_API_URL__ placeholder in the target environment file with a real
-// URL, runs the given command (e.g. `ng serve` or `ng build --configuration production`), then
-// always restores the placeholder afterward — on normal exit, on the command's own exit, and on
-// Ctrl+C/SIGTERM — so the working tree (and anything committed to git) never ends up with a real
-// URL baked in.
+// Substitutes the __WORKSHOP_API_URL__ placeholder (and, optionally, the __FIREBASE_*__
+// placeholders) in the target environment file with real values, runs the given command (e.g.
+// `ng serve` or `ng build --configuration production`), then always restores the placeholders
+// afterward — on normal exit, on the command's own exit, and on Ctrl+C/SIGTERM — so the working
+// tree (and anything committed to git) never ends up with real values baked in.
 //
-// Locally (target `dev`): loads a gitignored .env (see .env.example) for WORKSHOP_API_URL — this
-// is the one supported local path, and it only ever points at the DEV backend; there is no local
+// Locally (target `dev`): loads a gitignored .env (see .env.example) for these vars — this is
+// the one supported local path, and it only ever points at DEV resources; there is no local
 // path for target `prod`, production builds only happen in CI.
-// In CI: reads WORKSHOP_API_URL from process.env, populated by the env: block on the build step
+// In CI: reads the vars from process.env, populated by the env: block on the build step
 // (sourced from a GitHub Actions Environment variable — production or development — see
 // README.md's "Environment config" section).
+//
+// WORKSHOP_API_URL is required — the build fails without it. The FIREBASE_* vars are optional:
+// if a given one isn't set, its placeholder is left as-is in the built file and the firebase-page
+// demo falls back to its own hardcoded demo config at runtime instead of the build failing.
 
 const fs = require('fs');
 const path = require('path');
@@ -82,7 +86,40 @@ if (!original.includes('__WORKSHOP_API_URL__')) {
   process.exit(1);
 }
 
-fs.writeFileSync(filePath, original.replace('__WORKSHOP_API_URL__', value));
+// FIREBASE_* vars are optional — a missing one just leaves its placeholder untouched, letting
+// firebase-page.ts fall back to its own demo config rather than failing the whole build.
+const OPTIONAL_FIREBASE_SUBSTITUTIONS = [
+  ['FIREBASE_API_KEY', '__FIREBASE_API_KEY__'],
+  ['FIREBASE_AUTH_DOMAIN', '__FIREBASE_AUTH_DOMAIN__'],
+  ['FIREBASE_PROJECT_ID', '__FIREBASE_PROJECT_ID__'],
+  ['FIREBASE_STORAGE_BUCKET', '__FIREBASE_STORAGE_BUCKET__'],
+  ['FIREBASE_MESSAGING_SENDER_ID', '__FIREBASE_MESSAGING_SENDER_ID__'],
+  ['FIREBASE_APP_ID', '__FIREBASE_APP_ID__'],
+];
+
+let content = original.replace('__WORKSHOP_API_URL__', value);
+
+for (const [envVar, placeholder] of OPTIONAL_FIREBASE_SUBSTITUTIONS) {
+  const firebaseValue = process.env[envVar];
+  if (!firebaseValue) {
+    continue;
+  }
+  if (firebaseValue.includes("'") || firebaseValue.includes('\\')) {
+    console.error(`${envVar} contains a quote or backslash, which this simple substitution can't escape safely.`);
+    process.exit(1);
+  }
+  if (!content.includes(placeholder)) {
+    console.error(
+      `${filePath} does not contain the ${placeholder} placeholder — refusing to run, since ` +
+        'either the file already has a real value baked in or the placeholder was renamed ' +
+        'without updating this script.',
+    );
+    process.exit(1);
+  }
+  content = content.replace(placeholder, firebaseValue);
+}
+
+fs.writeFileSync(filePath, content);
 
 let restored = false;
 function restore() {

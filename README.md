@@ -75,12 +75,14 @@ Hosting behaviour is defined in `firebase.json` (SPA rewrite of all routes to `/
 
 ### One-time setup
 
-1. Create/select a Firebase project and replace `<YOUR_FIREBASE_PROJECT_ID>` in both `.firebaserc` and `.github/workflows/firebase-hosting-prod.yml`.
+1. Firebase project `poc-web-app-7e636` is already configured in `.firebaserc` and both deploy workflows.
 2. Create a service account with the **Firebase Hosting Admin** role and add its JSON key as the `FIREBASE_SERVICE_ACCOUNT` secret in the GitHub repo (Settings → Secrets and variables → Actions). Do **not** commit the key to the repo.
 3. Set up the `production`/`development` GitHub Environments and their `WORKSHOP_API_URL` variable — see "Environment config" below.
 4. (Optional, local deploys) Install the CLI with `npm i -g firebase-tools`, then `firebase login` and `firebase deploy --only hosting`.
 
-The site is served from `https://<YOUR_FIREBASE_PROJECT_ID>.web.app/`.
+The sites are served from:
+- **Production** (`main` branch): https://poc-web-app-7e636.web.app/
+- **Dev preview** (`develop` branch): https://poc-web-app-7e636--dev-yxijc8lc.web.app/
 
 ## Environment config
 
