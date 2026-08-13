@@ -27,6 +27,7 @@ import {
   User,
 } from 'firebase/auth';
 import * as firebaseui from 'firebaseui';
+import { environment } from '../../../environments/environment.dev';
 
 export interface FirebaseConfigInput {
   apiKey: string;
@@ -53,6 +54,15 @@ const DEFAULT_DEMO_CONFIG: FirebaseConfigInput = {
   appId: '1:123456789012:web:demo1234567890abcdef',
 };
 
+// Firebase config resolution (env-injected vs. demo fallback)
+function isInjectedFirebaseConfig(config: FirebaseConfigInput): boolean {
+  return !config.apiKey.startsWith('__');
+}
+
+const INITIAL_CONFIG: FirebaseConfigInput = isInjectedFirebaseConfig(environment.firebaseConfig)
+  ? environment.firebaseConfig
+  : DEFAULT_DEMO_CONFIG;
+
 const STORAGE_KEY = 'poc_firebase_ui_config';
 
 @Component({
@@ -68,7 +78,7 @@ export class FirebasePage implements OnInit, AfterViewInit, OnDestroy {
   protected activeTab = signal<'ui' | 'config' | 'user' | 'docs'>('ui');
 
   // Firebase state
-  protected config = signal<FirebaseConfigInput>({ ...DEFAULT_DEMO_CONFIG });
+  protected config = signal<FirebaseConfigInput>({ ...INITIAL_CONFIG });
   protected isDemoConfig = computed(() => this.config().apiKey.includes('DemoKey') || !this.config().apiKey);
   protected isInitialized = signal<boolean>(false);
   protected currentUser = signal<User | null>(null);
@@ -122,11 +132,11 @@ export class FirebasePage implements OnInit, AfterViewInit, OnDestroy {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        this.config.set({ ...DEFAULT_DEMO_CONFIG, ...parsed });
+        this.config.set({ ...INITIAL_CONFIG, ...parsed });
         this.addLog('info', 'Loaded saved Firebase config from localStorage.');
       }
     } catch {
-      this.config.set({ ...DEFAULT_DEMO_CONFIG });
+      this.config.set({ ...INITIAL_CONFIG });
     }
   }
 

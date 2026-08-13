@@ -11,6 +11,13 @@ import { CourseApplicationService } from '../course-application.service';
 import { getWorkshopCourseById } from '../workshop-courses';
 import { WorkshopApplicationsService, PaymentMethod } from '../workshop-applications.service';
 import { PromptPayConfigService } from '../prompt-pay-config.service';
+import {
+  PROMPTPAY_HEADER_IMAGE_SRC,
+  SHOP_LOGO_IMAGE_SRC,
+  formatTargetAccount,
+  loadImage,
+  renderPromptPaySlip,
+} from '../promptpay-slip';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
 const MAX_SLIP_BYTES = 8 * 1024 * 1024;
@@ -46,8 +53,24 @@ export class PaymentPage {
   protected readonly submittedMethod = signal<PaymentMethod | null>(null);
   protected readonly promptPayQrDataUrl = signal<string | null>(null);
   protected readonly promptPayQrError = signal(false);
+  protected readonly promptPaySlipDataUrl = signal<string | null>(null);
+  protected readonly promptPaySlipError = signal(false);
 
   private slipFile: File | null = null;
+  private readonly logosReady = signal(false);
+  private headerImage: HTMLImageElement | null = null;
+  private shopLogoImage: HTMLImageElement | null = null;
+  private promptPaySlipRequestId = 0;
+
+  constructor() {
+    Promise.all([loadImage(PROMPTPAY_HEADER_IMAGE_SRC), loadImage(SHOP_LOGO_IMAGE_SRC)])
+      .then(([header, shop]) => {
+        this.headerImage = header;
+        this.shopLogoImage = shop;
+        this.logosReady.set(true);
+      })
+      .catch(() => this.promptPaySlipError.set(true));
+  }
 
   protected readonly course = computed(() => {
     const draft = this.draft();
@@ -97,6 +120,52 @@ export class PaymentPage {
       .catch(() => {
         if (requestId === this.promptPayQrRequestId) {
           this.promptPayQrError.set(true);
+        }
+      });
+  });
+
+  private readonly composePromptPaySlip = effect(() => {
+    const qrDataUrl = this.promptPayQrDataUrl();
+    const logosReady = this.logosReady();
+    const promptPayId = this.promptPayConfig.promptPayId();
+    const total = this.total();
+    const course = this.course();
+    const translations = this.t();
+    const requestId = ++this.promptPaySlipRequestId;
+
+    this.promptPaySlipDataUrl.set(null);
+
+    if (!qrDataUrl || !logosReady || !this.headerImage || !this.shopLogoImage) {
+      return;
+    }
+
+    this.promptPaySlipError.set(false);
+
+    loadImage(qrDataUrl)
+      .then((qrImage) => {
+        if (requestId !== this.promptPaySlipRequestId) {
+          return;
+        }
+        const dataUrl = renderPromptPaySlip({
+          qrImage,
+          headerImage: this.headerImage!,
+          shopLogoImage: this.shopLogoImage!,
+          targetAccount: formatTargetAccount(promptPayId),
+          amount: total,
+          description: course ? course.name[this.languageService.language()] : '',
+          labels: {
+            shopName: translations.common.siteName,
+            targetAccount: translations.payment.slip.targetAccount,
+            transferAmount: translations.payment.slip.transferAmount,
+            noFixedAmount: translations.payment.slip.noFixedAmount,
+            description: translations.payment.slip.description,
+          },
+        });
+        this.promptPaySlipDataUrl.set(dataUrl);
+      })
+      .catch(() => {
+        if (requestId === this.promptPaySlipRequestId) {
+          this.promptPaySlipError.set(true);
         }
       });
   });

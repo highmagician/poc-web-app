@@ -1,8 +1,8 @@
-name: Deploy to Firebase Hosting (DEV)
+name: Deploy to Firebase Hosting (PROD)
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,8 +11,8 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    # GitHub Environment: development
-    environment: development
+    # GitHub Environment: production
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -23,8 +23,8 @@ jobs:
 
       - run: npm ci
 
-      # Build with DEV backend/Firebase config
-      - name: Build (devPreview)
+      # Build with PROD backend/Firebase config
+      - name: Build (production)
         env:
           WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
           FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
@@ -33,12 +33,12 @@ jobs:
           FIREBASE_STORAGE_BUCKET: ${{ vars.FIREBASE_STORAGE_BUCKET }}
           FIREBASE_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
-        run: node scripts/inject-api-url.js dev npx ng build --configuration devPreview
+        run: node scripts/inject-api-url.js prod npx ng build --configuration production
 
-      # Deploy to DEV Firebase project
+      # Deploy to PROD Firebase project
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: poc-web-app---dev
+          projectId: poc-web-app-7e636
           channelId: live
