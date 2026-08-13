@@ -1,22 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-// Substitutes the __WORKSHOP_API_URL__ placeholder (and, optionally, the __FIREBASE_*__
-// placeholders) in the target environment file with real values, runs the given command (e.g.
-// `ng serve` or `ng build --configuration production`), then always restores the placeholders
-// afterward — on normal exit, on the command's own exit, and on Ctrl+C/SIGTERM — so the working
-// tree (and anything committed to git) never ends up with real values baked in.
-//
-// Locally (target `dev`): loads a gitignored .env (see .env.example) for these vars — this is
-// the one supported local path, and it only ever points at DEV resources; there is no local
-// path for target `prod`, production builds only happen in CI.
-// In CI: reads the vars from process.env, populated by the env: block on the build step
-// (sourced from a GitHub Actions Environment variable — production or development — see
-// README.md's "Environment config" section).
-//
-// WORKSHOP_API_URL is required — the build fails without it. The FIREBASE_* vars are optional:
-// if a given one isn't set, its placeholder is left as-is in the built file and the firebase-page
-// demo falls back to its own hardcoded demo config at runtime instead of the build failing.
+// Injects env config into src/environments/environment.*.ts for the build/serve command, then restores placeholders.
 
 const fs = require('fs');
 const path = require('path');
@@ -86,8 +71,7 @@ if (!original.includes('__WORKSHOP_API_URL__')) {
   process.exit(1);
 }
 
-// FIREBASE_* vars are optional — a missing one just leaves its placeholder untouched, letting
-// firebase-page.ts fall back to its own demo config rather than failing the whole build.
+// Firebase config vars
 const OPTIONAL_FIREBASE_SUBSTITUTIONS = [
   ['FIREBASE_API_KEY', '__FIREBASE_API_KEY__'],
   ['FIREBASE_AUTH_DOMAIN', '__FIREBASE_AUTH_DOMAIN__'],

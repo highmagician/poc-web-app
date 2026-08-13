@@ -1,18 +1,4 @@
-/**
- * PROD environment — swapped in for `environment.dev.ts` on production builds (`fileReplacements`
- * in angular.json), i.e. `ng build --configuration production` as used by the `main`-branch live
- * Firebase Hosting deploy.
- *
- * workshopApiUrl and firebaseConfig are placeholders, not real values — see
- * scripts/inject-api-url.js and README.md's "Environment config" section. Never edit this file
- * to add real values back in directly, and never commit it resolved. There is no local fallback
- * for this file — production builds only ever happen in CI.
- *
- * firebaseConfig points at the live PROD Firebase project — kept separate from DEV's so the
- * firebase-page demo's Auth testing on the dev preview channel never touches real user data.
- * Substitution is optional: if left unset, the firebase-page demo falls back to its own
- * hardcoded demo config instead of failing the build.
- */
+// PROD environment config — placeholders injected by scripts/inject-api-url.js
 export const environment = {
   production: true,
   workshopApiUrl: '__WORKSHOP_API_URL__',

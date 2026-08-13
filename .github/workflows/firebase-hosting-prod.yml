@@ -11,9 +11,7 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    # Scopes vars.WORKSHOP_API_URL below to this GitHub Environment's own Variables (Settings ->
-    # Environments -> production) — see poc-apps-script's README.md "Environment config" section
-    # for the same pattern used on the backend.
+    # GitHub Environment: production
     environment: production
     steps:
       - uses: actions/checkout@v4
@@ -25,11 +23,7 @@ jobs:
 
       - run: npm ci
 
-      # Firebase Hosting serves from the site root, so no --base-href override.
-      # The FIREBASE_* vars are optional (see scripts/inject-api-url.js) — they point at the
-      # PROD Firebase project for the firebase-page demo's Auth testing, kept separate from
-      # DEV's own project (see firebase-hosting-dev.yml) so test sign-ins never land in the
-      # same Auth user pool as production.
+      # Build with PROD backend/Firebase config
       - name: Build (production)
         env:
           WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
@@ -41,6 +35,7 @@ jobs:
           FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
         run: node scripts/inject-api-url.js prod npx ng build --configuration production
 
+      # Deploy to PROD Firebase project
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

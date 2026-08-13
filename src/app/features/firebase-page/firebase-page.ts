@@ -54,11 +54,7 @@ const DEFAULT_DEMO_CONFIG: FirebaseConfigInput = {
   appId: '1:123456789012:web:demo1234567890abcdef',
 };
 
-// Real values come from environment.firebaseConfig, injected at build time from GitHub
-// Environment variables (see scripts/inject-api-url.js) — never hardcode a real project's
-// config here directly. If injection didn't happen (e.g. `ng serve` run outside the npm
-// wrapper, or the vars aren't set yet), the placeholder tokens are left untouched, so fall back
-// to the demo config instead.
+// Firebase config resolution (env-injected vs. demo fallback)
 function isInjectedFirebaseConfig(config: FirebaseConfigInput): boolean {
   return !config.apiKey.startsWith('__');
 }

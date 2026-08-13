@@ -11,9 +11,7 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    # Scopes vars.WORKSHOP_API_URL below to this GitHub Environment's own Variables (Settings ->
-    # Environments -> development) — see poc-apps-script's README.md "Environment config" section
-    # for the same pattern used on the backend.
+    # GitHub Environment: development
     environment: development
     steps:
       - uses: actions/checkout@v4
@@ -25,12 +23,7 @@ jobs:
 
       - run: npm ci
 
-      # Firebase Hosting serves from the site root, so no --base-href override.
-      # devPreview is an optimized build (unlike the local-only "development" config) that still
-      # targets the DEV Apps Script backend — see src/environments/environment.dev.ts.
-      # The FIREBASE_* vars are optional (see scripts/inject-api-url.js) — they point at a
-      # separate DEV Firebase project for the firebase-page demo's Auth testing, so test sign-ins
-      # never land in the same Auth user pool as production (see firebase-hosting-prod.yml).
+      # Build with DEV backend/Firebase config
       - name: Build (devPreview)
         env:
           WORKSHOP_API_URL: ${{ vars.WORKSHOP_API_URL }}
@@ -42,13 +35,7 @@ jobs:
           FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
         run: node scripts/inject-api-url.js dev npx ng build --configuration devPreview
 
-      # Deploys to the live channel of the separate poc-web-app---dev Firebase project (not
-      # poc-web-app-7e636), so DEV Hosting is fully isolated from PROD — not just by channel.
-      # firebaseServiceAccount resolves to this job's own value because this job declares
-      # `environment: development` above — Settings -> Environments -> development must have
-      # its own Secret named FIREBASE_SERVICE_ACCOUNT (the poc-web-app---dev project's service
-      # account key), distinct from whatever value the `production` Environment holds for the
-      # same secret name (see firebase-hosting-prod.yml). No separate secret name needed.
+      # Deploy to DEV Firebase project
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
