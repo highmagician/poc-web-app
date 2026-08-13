@@ -44,11 +44,14 @@ jobs:
 
       # Deploys to the live channel of the separate poc-web-app---dev Firebase project (not
       # poc-web-app-7e636), so DEV Hosting is fully isolated from PROD — not just by channel.
-      # Requires its own Service Account key (FIREBASE_SERVICE_ACCOUNT_DEV), since the PROD
-      # secret's key is scoped to poc-web-app-7e636 and has no permission on this project.
+      # firebaseServiceAccount resolves to this job's own value because this job declares
+      # `environment: development` above — Settings -> Environments -> development must have
+      # its own Secret named FIREBASE_SERVICE_ACCOUNT (the poc-web-app---dev project's service
+      # account key), distinct from whatever value the `production` Environment holds for the
+      # same secret name (see firebase-hosting-prod.yml). No separate secret name needed.
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: poc-web-app---dev
           channelId: live
