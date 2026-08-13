@@ -104,9 +104,19 @@ export interface Translations {
       download: string;
     };
   };
+  adminLogin: {
+    title: string;
+    subtitle: string;
+    signInButton: string;
+    signingIn: string;
+    signInError: string;
+    notAllowedError: string;
+  };
   admin: {
     title: string;
     subtitle: string;
+    signedInAs: string;
+    signOutButton: string;
     emptyTitle: string;
     emptyMessage: string;
     backToWorkshop: string;
@@ -261,9 +271,19 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         download: 'Download QR image',
       },
     },
+    adminLogin: {
+      title: 'Admin sign-in',
+      subtitle: 'Sign in with your Google account to manage workshop applications.',
+      signInButton: 'Sign in with Google',
+      signingIn: 'Signing in…',
+      signInError: "Couldn't sign in. Please try again.",
+      notAllowedError: 'This Google account is not authorized for admin access.',
+    },
     admin: {
       title: 'Workshop applications',
       subtitle: 'All course applications submitted through the apply form',
+      signedInAs: 'Signed in as',
+      signOutButton: 'Sign out',
       emptyTitle: 'No applications yet',
       emptyMessage: 'Submitted applications will show up here.',
       backToWorkshop: 'Back to workshop page',
@@ -416,9 +436,19 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         download: 'ดาวน์โหลดรูปคิวอาร์',
       },
     },
+    adminLogin: {
+      title: 'เข้าสู่ระบบผู้ดูแล',
+      subtitle: 'เข้าสู่ระบบด้วยบัญชี Google เพื่อจัดการใบสมัครเวิร์กช็อป',
+      signInButton: 'เข้าสู่ระบบด้วย Google',
+      signingIn: 'กำลังเข้าสู่ระบบ…',
+      signInError: 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง',
+      notAllowedError: 'บัญชี Google นี้ไม่มีสิทธิ์เข้าใช้งานระบบผู้ดูแล',
+    },
     admin: {
       title: 'รายการสมัครเรียนเวิร์กช็อป',
       subtitle: 'ใบสมัครคอร์สทั้งหมดที่ส่งผ่านแบบฟอร์มสมัคร',
+      signedInAs: 'เข้าสู่ระบบในชื่อ',
+      signOutButton: 'ออกจากระบบ',
       emptyTitle: 'ยังไม่มีใบสมัคร',
       emptyMessage: 'ใบสมัครที่ส่งเข้ามาจะแสดงที่นี่',
       backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',

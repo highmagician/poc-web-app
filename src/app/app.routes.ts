@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { adminAuthGuard } from './auth/admin-auth.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -42,7 +44,15 @@ export const routes: Routes = [
       import('./features/workshop/payment-page/payment-page').then((m) => m.PaymentPage),
   },
   {
+    path: 'bakery/workshop/admin/login',
+    loadComponent: () =>
+      import('./features/workshop/admin-login-page/admin-login-page').then(
+        (m) => m.AdminLoginPage,
+      ),
+  },
+  {
     path: 'bakery/workshop/admin',
+    canActivate: [adminAuthGuard],
     loadComponent: () =>
       import('./features/workshop/admin-page/admin-page').then((m) => m.AdminPage),
   },

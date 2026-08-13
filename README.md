@@ -12,16 +12,11 @@ npm start
 ```
 
 (Not `ng serve` directly — `npm start` runs `node scripts/inject-api-url.js dev ng serve`, which
-substitutes your `.env`'s URL into `src/environments/environment.dev.ts` before starting `ng
-serve`, and restores the placeholder when the server stops. See "Environment config" below.)
+substitutes your `.env`'s values into a gitignored `src/environments/environment.local.ts` before
+starting `ng serve`. `environment.dev.ts` itself is never modified. See "Environment config"
+below.)
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-**If you kill the dev server non-interactively** (e.g. `kill` on a backgrounded process rather
-than Ctrl+C in its own terminal), target the actual `node scripts/inject-api-url.js` process, not
-`npm`'s own PID — npm doesn't forward signals to the child it spawns, so killing npm's PID leaves
-`environment.dev.ts` with the real URL still baked in. Ctrl+C in an interactive terminal doesn't
-have this problem — it signals the whole foreground process group at once.
 
 ## Code scaffolding
 
@@ -86,20 +81,28 @@ The sites are served from:
 
 ## Environment config
 
-`src/environments/environment.dev.ts` and `environment.prod.ts` hold `__WORKSHOP_API_URL__` — a
-placeholder, not a real URL — instead of the Apps Script backend URL directly, so it's never
-committed to git. `scripts/inject-api-url.js` substitutes it right before `ng serve`/`ng build`
-and restores the placeholder when that command exits (see "Development server" above for the one
-caveat around killing the dev server non-interactively).
+`src/environments/environment.dev.ts` and `environment.prod.ts` hold placeholders
+(`__WORKSHOP_API_URL__`, `__FIREBASE_*__`, `__ADMIN_ALLOWED_EMAILS__`) instead of real values, so
+nothing sensitive is committed to git. `scripts/inject-api-url.js` resolves them from env vars
+before `ng serve`/`ng build`:
+
+- **`dev` target**: writes the substituted values into `environment.local.ts` (gitignored,
+  swapped in via `angular.json`'s `development`/`devPreview` `fileReplacements`).
+  `environment.dev.ts` is only ever read as a template, never written.
+- **`prod` target**: writes straight into `environment.prod.ts` and restores the placeholder once
+  the command exits — this only runs in CI, on an ephemeral runner.
 
 - **Locally**: only the `dev` target works — copy `.env.example` to `.env` (gitignored) and fill
   in the DEV backend's URL. There's no local path for `prod`; see "Building" above.
 - **In CI**: each workflow job declares `environment: production`/`environment: development`
   (`firebase-hosting-prod.yml`/`firebase-hosting-dev.yml`), and its `env:` block reads
-  `${{ vars.WORKSHOP_API_URL }}` — GitHub resolves that to whichever value is scoped to the job's
-  declared Environment. Set it up under **Settings → Environments**: create `production` and
-  `development`, each with its own **Environment variable** named `WORKSHOP_API_URL` (the PROD
-  `/exec` URL in `production`, the DEV `/exec` URL in `development`).
+  `${{ vars.WORKSHOP_API_URL }}` plus each `${{ vars.FIREBASE_* }}` and
+  `${{ vars.ADMIN_ALLOWED_EMAILS }}` — GitHub resolves each to whichever value is scoped to the
+  job's declared Environment. Set them up under **Settings → Environments**: create `production`
+  and `development`, each with its own **Environment variables** for all of the above (the PROD
+  values in `production`, the DEV values in `development`). `ADMIN_ALLOWED_EMAILS` is deny-by-
+  default — leaving it unset in an Environment means nobody can sign into `bakery/workshop/admin`
+  on that deploy.
 
 This mirrors the same pattern used on the backend (`poc-apps-script`'s README — "Environment
 config" section) for keeping deployment-specific values out of source.

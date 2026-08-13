@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
+import { AuthService } from '../../../auth/auth.service';
 import { LanguageService } from '../../../i18n/language.service';
 import { WorkshopApplicationsService, WorkshopApplication } from '../workshop-applications.service';
 import { getWorkshopCourseById } from '../workshop-courses';
@@ -20,6 +21,8 @@ export class AdminPage {
   private readonly applicationsApi = inject(WorkshopApplicationsService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly promptPayConfig = inject(PromptPayConfigService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly languageService = inject(LanguageService);
   protected readonly t = this.languageService.t;
@@ -33,8 +36,15 @@ export class AdminPage {
     promptPayId: [this.promptPayConfig.promptPayId()],
   });
 
+  protected readonly currentUser = this.authService.currentUser;
+
   constructor() {
     this.refresh();
+  }
+
+  protected async signOut(): Promise<void> {
+    await this.authService.signOut();
+    this.router.navigateByUrl('/bakery/workshop/admin/login');
   }
 
   protected savePromptPaySettings(): void {

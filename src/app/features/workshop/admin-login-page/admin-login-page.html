@@ -1,0 +1,25 @@
+@let translations = t();
+
+<div class="admin-login-page">
+  <app-top-bar />
+
+  <section class="login-card">
+    <h1>{{ translations.adminLogin.title }}</h1>
+    <p class="subtitle">{{ translations.adminLogin.subtitle }}</p>
+
+    @if (notAllowedError()) {
+      <p class="error">{{ translations.adminLogin.notAllowedError }}</p>
+    } @else if (signInError()) {
+      <p class="error">{{ translations.adminLogin.signInError }}</p>
+    }
+
+    <button
+      type="button"
+      class="google-button"
+      [disabled]="signingIn()"
+      (click)="signInWithGoogle()"
+    >
+      {{ signingIn() ? translations.adminLogin.signingIn : translations.adminLogin.signInButton }}
+    </button>
+  </section>
+</div>

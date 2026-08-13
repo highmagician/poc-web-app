@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.admin-login-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.login-card {
+  max-width: 380px;
+  margin: 3rem auto 0;
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: #8a6a4e;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.error {
+  margin: 0 0 1rem;
+  color: #c23434;
+  font-size: 0.85rem;
+}
+
+.google-button {
+  width: 100%;
+  background: #e07a3f;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #c96a32;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
