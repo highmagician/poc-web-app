@@ -10,4 +10,5 @@ export const environment = {
     messagingSenderId: '__FIREBASE_MESSAGING_SENDER_ID__',
     appId: '__FIREBASE_APP_ID__',
   },
+  adminAllowedEmails: '__ADMIN_ALLOWED_EMAILS__',
 };

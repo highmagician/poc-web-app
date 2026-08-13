@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-// Injects env config into src/environments/environment.*.ts for the build/serve command, then restores placeholders.
+// Injects env config for the build/serve command, then restores placeholders (prod only).
 
 const fs = require('fs');
 const path = require('path');
@@ -53,25 +53,25 @@ if (value.includes("'") || value.includes('\\')) {
   process.exit(1);
 }
 
-const filePath = path.join(
-  __dirname,
-  '..',
-  'src',
-  'environments',
+const environmentsDir = path.join(__dirname, '..', 'src', 'environments');
+const templatePath = path.join(
+  environmentsDir,
   target === 'prod' ? 'environment.prod.ts' : 'environment.dev.ts',
 );
-const original = fs.readFileSync(filePath, 'utf8');
+const outputPath = target === 'prod' ? templatePath : path.join(environmentsDir, 'environment.local.ts');
+
+const original = fs.readFileSync(templatePath, 'utf8');
 
 if (!original.includes('__WORKSHOP_API_URL__')) {
   console.error(
-    `${filePath} does not contain the __WORKSHOP_API_URL__ placeholder — refusing to run, since ` +
+    `${templatePath} does not contain the __WORKSHOP_API_URL__ placeholder — refusing to run, since ` +
       'either the file already has a real URL baked in or the placeholder was renamed without ' +
       'updating this script.',
   );
   process.exit(1);
 }
 
-// Firebase config vars
+// Firebase config vars, plus other optional values that shouldn't sit in git
 const OPTIONAL_FIREBASE_SUBSTITUTIONS = [
   ['FIREBASE_API_KEY', '__FIREBASE_API_KEY__'],
   ['FIREBASE_AUTH_DOMAIN', '__FIREBASE_AUTH_DOMAIN__'],
@@ -79,6 +79,7 @@ const OPTIONAL_FIREBASE_SUBSTITUTIONS = [
   ['FIREBASE_STORAGE_BUCKET', '__FIREBASE_STORAGE_BUCKET__'],
   ['FIREBASE_MESSAGING_SENDER_ID', '__FIREBASE_MESSAGING_SENDER_ID__'],
   ['FIREBASE_APP_ID', '__FIREBASE_APP_ID__'],
+  ['ADMIN_ALLOWED_EMAILS', '__ADMIN_ALLOWED_EMAILS__'],
 ];
 
 let content = original.replace('__WORKSHOP_API_URL__', value);
@@ -94,7 +95,7 @@ for (const [envVar, placeholder] of OPTIONAL_FIREBASE_SUBSTITUTIONS) {
   }
   if (!content.includes(placeholder)) {
     console.error(
-      `${filePath} does not contain the ${placeholder} placeholder — refusing to run, since ` +
+      `${templatePath} does not contain the ${placeholder} placeholder — refusing to run, since ` +
         'either the file already has a real value baked in or the placeholder was renamed ' +
         'without updating this script.',
     );
@@ -103,15 +104,15 @@ for (const [envVar, placeholder] of OPTIONAL_FIREBASE_SUBSTITUTIONS) {
   content = content.replace(placeholder, firebaseValue);
 }
 
-fs.writeFileSync(filePath, content);
+fs.writeFileSync(outputPath, content);
 
 let restored = false;
 function restore() {
-  if (restored) {
+  if (restored || outputPath !== templatePath) {
     return;
   }
   restored = true;
-  fs.writeFileSync(filePath, original);
+  fs.writeFileSync(templatePath, original);
 }
 
 const child = spawn(commandArgs[0], commandArgs.slice(1), {

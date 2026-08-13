@@ -3,8 +3,21 @@
 <div class="admin-page">
   <app-top-bar />
 
-  <h1>{{ translations.admin.title }}</h1>
-  <p class="subtitle">{{ translations.admin.subtitle }}</p>
+  <div class="page-header">
+    <div>
+      <h1>{{ translations.admin.title }}</h1>
+      <p class="subtitle">{{ translations.admin.subtitle }}</p>
+    </div>
+
+    @if (currentUser()) {
+      <div class="account-info">
+        <span class="signed-in-as">{{ translations.admin.signedInAs }} {{ currentUser()!.email }}</span>
+        <button type="button" class="sign-out-button" (click)="signOut()">
+          {{ translations.admin.signOutButton }}
+        </button>
+      </div>
+    }
+  </div>
 
   <section class="settings-card">
     <h2>{{ translations.admin.settings.title }}</h2>
