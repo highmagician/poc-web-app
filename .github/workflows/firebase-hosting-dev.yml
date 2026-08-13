@@ -42,12 +42,13 @@ jobs:
           FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
         run: node scripts/inject-api-url.js dev npx ng build --configuration devPreview
 
-      # Deploys to the "dev" preview channel of the same site (not the live prod channel),
-      # so it gets its own URL and never overwrites production.
+      # Deploys to the live channel of the separate poc-web-app---dev Firebase project (not
+      # poc-web-app-7e636), so DEV Hosting is fully isolated from PROD — not just by channel.
+      # Requires its own Service Account key (FIREBASE_SERVICE_ACCOUNT_DEV), since the PROD
+      # secret's key is scoped to poc-web-app-7e636 and has no permission on this project.
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: poc-web-app-7e636
-          channelId: dev
-          expires: 30d
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+          projectId: poc-web-app---dev
+          channelId: live
