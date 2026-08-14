@@ -9,6 +9,7 @@ export const environment = {
     storageBucket: '__FIREBASE_STORAGE_BUCKET__',
     messagingSenderId: '__FIREBASE_MESSAGING_SENDER_ID__',
     appId: '__FIREBASE_APP_ID__',
+    vapidKey: '__FIREBASE_VAPID_KEY__',
   },
   adminAllowedEmails: '__ADMIN_ALLOWED_EMAILS__',
 };

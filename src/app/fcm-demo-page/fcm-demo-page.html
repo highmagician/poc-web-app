@@ -1,0 +1,56 @@
+<header>
+  <h1>FCM notification test page</h1>
+  <p>Subscribes this browser for push notifications, then lets you fire a test message at it — either right away or at a scheduled time.</p>
+</header>
+
+<main>
+  <section class="status">
+    @if (statusMessage()) {
+      <p class="status-ok">{{ statusMessage() }}</p>
+    }
+    @if (errorMessage()) {
+      <p class="status-error">{{ errorMessage() }}</p>
+    }
+
+    <label>
+      FCM token (this browser)
+      <input type="text" [value]="token()" readonly />
+    </label>
+  </section>
+
+  <section class="form-section">
+    <h2>Message content</h2>
+    <label>
+      Title
+      <input type="text" [ngModel]="title()" (ngModelChange)="title.set($event)" />
+    </label>
+    <label>
+      Body
+      <textarea [ngModel]="body()" (ngModelChange)="body.set($event)"></textarea>
+    </label>
+    <label>
+      Link (opened when the notification is clicked)
+      <input type="text" [ngModel]="link()" (ngModelChange)="link.set($event)" />
+    </label>
+  </section>
+
+  <section class="form-section">
+    <h2>Send now</h2>
+    <button type="button" [disabled]="!token() || sendingNow()" (click)="sendNow()">
+      {{ sendingNow() ? 'Sending…' : 'Send now' }}
+    </button>
+  </section>
+
+  <section class="form-section">
+    <h2>Schedule for later</h2>
+    <label>
+      Send at
+      <input type="datetime-local" [ngModel]="sendAt()" (ngModelChange)="sendAt.set($event)" />
+    </label>
+    <button type="button" [disabled]="!token() || !sendAt() || scheduling()" (click)="schedule()">
+      {{ scheduling() ? 'Scheduling…' : 'Schedule' }}
+    </button>
+  </section>
+
+  <p><a routerLink="/bakery/workshop">Visit the Homie Bakery workshop page →</a></p>
+</main>
