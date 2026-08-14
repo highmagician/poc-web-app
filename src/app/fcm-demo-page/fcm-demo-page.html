@@ -13,9 +13,38 @@
     }
 
     <label>
-      FCM token (this browser)
-      <input type="text" [value]="token()" readonly />
+      This device's own FCM token (copy this into another device's "Target token" field to send here)
+      <input type="text" [value]="ownToken()" readonly />
     </label>
+
+    <label>
+      Target token (defaults to this device, or paste another device's token to send there instead)
+      <input type="text" [ngModel]="token()" (ngModelChange)="token.set($event)" />
+    </label>
+
+    <div class="saved-token-form">
+      <input
+        type="text"
+        placeholder="Name this token (e.g. My phone)"
+        [ngModel]="newTokenName()"
+        (ngModelChange)="newTokenName.set($event)"
+      />
+      <button type="button" [disabled]="!newTokenName() || !token()" (click)="saveCurrentToken()">
+        Save target token
+      </button>
+    </div>
+
+    @if (savedTokens().length) {
+      <ul class="saved-token-list">
+        @for (saved of savedTokens(); track saved.name) {
+          <li>
+            <span>{{ saved.name }}</span>
+            <button type="button" (click)="useSavedToken(saved)">Use</button>
+            <button type="button" class="btn-danger" (click)="deleteSavedToken(saved.name)">✕</button>
+          </li>
+        }
+      </ul>
+    }
   </section>
 
   <section class="form-section">

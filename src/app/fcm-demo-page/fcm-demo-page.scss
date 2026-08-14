@@ -70,3 +70,51 @@ button {
 .status-error {
   color: #c23434;
 }
+
+.saved-token-form {
+  display: flex;
+  gap: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    align-self: auto;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+.saved-token-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    span {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    button {
+      align-self: auto;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+.btn-danger {
+  background: #c23434;
+}
