@@ -10,6 +10,20 @@ import { FcmNotificationsService } from './fcm-notifications.service';
 const FCM_APP_NAME = 'fcm-demo';
 const FCM_SW_SCOPE = '/firebase-cloud-messaging-push-scope';
 const NOTIFICATION_ICON = '/icons/icon-192x192.png';
+const SAVED_TOKENS_STORAGE_KEY = 'poc-web-app.fcm-demo.saved-tokens';
+
+export interface SavedToken {
+  name: string;
+  token: string;
+}
+
+function loadSavedTokens(): SavedToken[] {
+  try {
+    return JSON.parse(localStorage.getItem(SAVED_TOKENS_STORAGE_KEY) ?? '[]');
+  } catch {
+    return [];
+  }
+}
 
 @Component({
   selector: 'app-fcm-demo-page',
@@ -22,6 +36,7 @@ export class FcmDemoPage implements OnInit {
   private messaging: Messaging | null = null;
 
   protected readonly token = signal('');
+  protected readonly ownToken = signal('');
   protected readonly statusMessage = signal('');
   protected readonly errorMessage = signal('');
   protected readonly sendingNow = signal(false);
@@ -31,6 +46,9 @@ export class FcmDemoPage implements OnInit {
   protected readonly body = signal('Hello from the Homie Bakery admin test page');
   protected readonly link = signal('/bakery/workshop');
   protected readonly sendAt = signal('');
+
+  protected readonly savedTokens = signal<SavedToken[]>(loadSavedTokens());
+  protected readonly newTokenName = signal('');
 
   ngOnInit(): void {
     void this.setupMessaging();
@@ -69,6 +87,7 @@ export class FcmDemoPage implements OnInit {
         serviceWorkerRegistration: registration,
       });
       this.token.set(token);
+      this.ownToken.set(token);
       this.statusMessage.set('Subscribed for push notifications on this browser.');
 
       onMessage(this.messaging, (payload) => {
@@ -82,6 +101,31 @@ export class FcmDemoPage implements OnInit {
     } catch (err) {
       this.errorMessage.set(err instanceof Error ? err.message : 'Failed to set up push notifications.');
     }
+  }
+
+  protected saveCurrentToken(): void {
+    const name = this.newTokenName().trim();
+    if (!name || !this.token()) {
+      return;
+    }
+
+    const updated = [
+      ...this.savedTokens().filter((saved) => saved.name !== name),
+      { name, token: this.token() },
+    ];
+    this.savedTokens.set(updated);
+    localStorage.setItem(SAVED_TOKENS_STORAGE_KEY, JSON.stringify(updated));
+    this.newTokenName.set('');
+  }
+
+  protected useSavedToken(saved: SavedToken): void {
+    this.token.set(saved.token);
+  }
+
+  protected deleteSavedToken(name: string): void {
+    const updated = this.savedTokens().filter((saved) => saved.name !== name);
+    this.savedTokens.set(updated);
+    localStorage.setItem(SAVED_TOKENS_STORAGE_KEY, JSON.stringify(updated));
   }
 
   protected async sendNow(): Promise<void> {
