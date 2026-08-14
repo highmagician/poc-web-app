@@ -24,6 +24,10 @@ export const routes: Routes = [
       import('./promptpay-demo-page/promptpay-demo-page').then((m) => m.PromptPayDemoPage),
   },
   {
+    path: 'fcm-demo',
+    loadComponent: () => import('./fcm-demo-page/fcm-demo-page').then((m) => m.FcmDemoPage),
+  },
+  {
     path: 'bakery/workshop',
     loadComponent: () =>
       import('./features/workshop/workshop-page/workshop-page').then((m) => m.WorkshopPage),
