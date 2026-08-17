@@ -1,0 +1,38 @@
+@let translations = t();
+
+<div class="check-status-login-page">
+  <app-top-bar />
+
+  <section class="login-card">
+    <h1>{{ translations.checkStatusLogin.title }}</h1>
+    <p class="subtitle">{{ translations.checkStatusLogin.subtitle }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label>
+        {{ translations.checkStatusLogin.emailLabel }}
+        <input type="email" formControlName="email" />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <span class="error">{{ translations.workshop.validation.invalidEmail }}</span>
+        }
+      </label>
+
+      <label>
+        {{ translations.checkStatusLogin.tokenLabel }}
+        <input type="text" formControlName="token" />
+        <span class="hint">{{ translations.checkStatusLogin.tokenHint }}</span>
+      </label>
+
+      @if (adminEmailError()) {
+        <p class="error">{{ translations.checkStatusLogin.adminEmailError }}</p>
+      } @else if (notFoundError()) {
+        <p class="error">{{ translations.checkStatusLogin.notFoundError }}</p>
+      }
+
+      <button type="submit" class="primary-button" [disabled]="checking()">
+        {{ checking() ? translations.checkStatusLogin.checking : translations.checkStatusLogin.submitButton }}
+      </button>
+    </form>
+
+    <a routerLink="/bakery/workshop" class="back-link">{{ translations.checkStatusLogin.backToWorkshop }}</a>
+  </section>
+</div>

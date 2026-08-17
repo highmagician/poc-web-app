@@ -30,6 +30,12 @@ function parseAllowedEmails(raw: string): string[] {
 
 const ALLOWED_EMAILS = parseAllowedEmails(environment.adminAllowedEmails);
 
+// Exported so the client-facing check-status login can reject admin emails without needing to
+// pull in the whole Firebase-backed AuthService just for this one string comparison.
+export function isAdminAllowedEmail(email: string): boolean {
+  return ALLOWED_EMAILS.includes(email.trim().toLowerCase());
+}
+
 export class NotAllowedError extends Error {}
 
 @Injectable({ providedIn: 'root' })
@@ -77,6 +83,6 @@ export class AuthService {
   }
 
   private isEmailAllowed(email: string | null): boolean {
-    return !!email && ALLOWED_EMAILS.includes(email.toLowerCase());
+    return !!email && isAdminAllowedEmail(email);
   }
 }

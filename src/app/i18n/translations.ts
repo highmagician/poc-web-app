@@ -48,6 +48,7 @@ export interface Translations {
     subtitle: string;
     courseSummary: string;
     applicantSummary: string;
+    confirmationEmailNote: string;
     name: string;
     email: string;
     phone: string;
@@ -102,6 +103,37 @@ export interface Translations {
       noFixedAmount: string;
       description: string;
       download: string;
+    };
+  };
+  checkStatusLogin: {
+    title: string;
+    subtitle: string;
+    emailLabel: string;
+    tokenLabel: string;
+    tokenHint: string;
+    submitButton: string;
+    checking: string;
+    notFoundError: string;
+    adminEmailError: string;
+    backToWorkshop: string;
+  };
+  checkStatus: {
+    title: string;
+    subtitle: string;
+    signedInAs: string;
+    checkAnotherButton: string;
+    resultCourse: string;
+    resultDate: string;
+    resultParticipants: string;
+    resultStatus: string;
+    resultReference: string;
+    resultTotal: string;
+    backToWorkshop: string;
+    loadError: string;
+    statusLabels: {
+      pending: string;
+      review: string;
+      paid: string;
     };
   };
   adminLogin: {
@@ -215,6 +247,8 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       subtitle: 'Review your course application before payment',
       courseSummary: 'Course',
       applicantSummary: 'Applicant details',
+      confirmationEmailNote:
+        "We've emailed you a confirmation with a link to check your registration status anytime.",
       name: 'Name',
       email: 'Email',
       phone: 'Phone',
@@ -269,6 +303,37 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         noFixedAmount: 'No fixed amount — enter in your banking app',
         description: 'Description',
         download: 'Download QR image',
+      },
+    },
+    checkStatusLogin: {
+      title: 'Check your registration',
+      subtitle: "Enter the email you applied with and the token from your confirmation email to view your booking status.",
+      emailLabel: 'Email address',
+      tokenLabel: 'Status token',
+      tokenHint: 'Find this in the confirmation email we sent when you applied.',
+      submitButton: 'Check status',
+      checking: 'Checking…',
+      notFoundError: "We couldn't find a registration with that email and token. Please double-check and try again.",
+      adminEmailError: 'This email is reserved for admin sign-in. Please use the admin sign-in page instead.',
+      backToWorkshop: 'Back to workshop page',
+    },
+    checkStatus: {
+      title: 'Your registration',
+      subtitle: 'Here is the latest status of your booking',
+      signedInAs: 'Checking status for',
+      checkAnotherButton: 'Check another registration',
+      resultCourse: 'Course',
+      resultDate: 'Preferred date',
+      resultParticipants: 'Participants',
+      resultStatus: 'Status',
+      resultReference: 'Booking reference',
+      resultTotal: 'Total',
+      backToWorkshop: 'Back to workshop page',
+      loadError: "Couldn't load your registration. Please try again.",
+      statusLabels: {
+        pending: 'Pending payment',
+        review: 'Awaiting slip review',
+        paid: 'Paid',
       },
     },
     adminLogin: {
@@ -380,6 +445,7 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       subtitle: 'ตรวจสอบใบสมัครคอร์สของคุณก่อนชำระเงิน',
       courseSummary: 'คอร์ส',
       applicantSummary: 'ข้อมูลผู้สมัคร',
+      confirmationEmailNote: 'เราได้ส่งอีเมลยืนยันพร้อมลิงก์สำหรับตรวจสอบสถานะการลงทะเบียนของคุณไปให้แล้ว',
       name: 'ชื่อ',
       email: 'อีเมล',
       phone: 'เบอร์โทรศัพท์',
@@ -434,6 +500,37 @@ export const TRANSLATIONS: Record<Language, Translations> = {
         noFixedAmount: 'ไม่ระบุจำนวนเงิน — กรุณากรอกในแอปธนาคาร',
         description: 'รายละเอียด',
         download: 'ดาวน์โหลดรูปคิวอาร์',
+      },
+    },
+    checkStatusLogin: {
+      title: 'ตรวจสอบการลงทะเบียนของคุณ',
+      subtitle: 'กรอกอีเมลที่ใช้สมัครและโทเค็นจากอีเมลยืนยัน เพื่อตรวจสอบสถานะการจองของคุณ',
+      emailLabel: 'อีเมล',
+      tokenLabel: 'โทเค็นสถานะ',
+      tokenHint: 'ดูโทเค็นนี้ได้ในอีเมลยืนยันที่เราส่งให้เมื่อคุณสมัคร',
+      submitButton: 'ตรวจสอบสถานะ',
+      checking: 'กำลังตรวจสอบ...',
+      notFoundError: 'ไม่พบการลงทะเบียนที่ตรงกับอีเมลและโทเค็นนี้ กรุณาตรวจสอบและลองใหม่อีกครั้ง',
+      adminEmailError: 'อีเมลนี้สงวนไว้สำหรับการเข้าสู่ระบบผู้ดูแล กรุณาใช้หน้าเข้าสู่ระบบผู้ดูแลแทน',
+      backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
+    },
+    checkStatus: {
+      title: 'การลงทะเบียนของคุณ',
+      subtitle: 'สถานะล่าสุดของการจองของคุณ',
+      signedInAs: 'ตรวจสอบสถานะสำหรับ',
+      checkAnotherButton: 'ตรวจสอบรายการอื่น',
+      resultCourse: 'คอร์ส',
+      resultDate: 'วันที่ต้องการ',
+      resultParticipants: 'จำนวนผู้เข้าร่วม',
+      resultStatus: 'สถานะ',
+      resultReference: 'หมายเลขอ้างอิงการจอง',
+      resultTotal: 'ยอดรวม',
+      backToWorkshop: 'กลับไปหน้าเวิร์กช็อป',
+      loadError: 'ไม่สามารถโหลดข้อมูลการลงทะเบียนได้ กรุณาลองใหม่อีกครั้ง',
+      statusLabels: {
+        pending: 'รอชำระเงิน',
+        review: 'รอตรวจสอบสลิป',
+        paid: 'ชำระเงินแล้ว',
       },
     },
     adminLogin: {

@@ -1,0 +1,57 @@
+@let translations = t();
+
+<div class="check-status-page">
+  <app-top-bar />
+
+  @if (application()) {
+    <section class="result">
+      <h1>{{ translations.checkStatus.title }}</h1>
+      <p class="subtitle">{{ translations.checkStatus.subtitle }}</p>
+      <p class="signed-in-as">{{ translations.checkStatus.signedInAs }} {{ application()!.email }}</p>
+
+      <div class="card">
+        <dl>
+          <div>
+            <dt>{{ translations.checkStatus.resultCourse }}</dt>
+            <dd>{{ courseName(application()!.courseId) }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkStatus.resultDate }}</dt>
+            <dd>{{ formatDate(application()!.preferredDate) }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkStatus.resultParticipants }}</dt>
+            <dd>{{ application()!.participants }}</dd>
+          </div>
+          <div>
+            <dt>{{ translations.checkStatus.resultStatus }}</dt>
+            <dd>
+              <span class="status-badge" [class]="application()!.status">
+                {{ translations.checkStatus.statusLabels[application()!.status] }}
+              </span>
+            </dd>
+          </div>
+          @if (application()!.reference) {
+            <div>
+              <dt>{{ translations.checkStatus.resultReference }}</dt>
+              <dd>{{ application()!.reference }}</dd>
+            </div>
+          }
+          @if (application()!.totalThb) {
+            <div>
+              <dt>{{ translations.checkStatus.resultTotal }}</dt>
+              <dd>฿{{ application()!.totalThb | number }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+
+      <div class="actions">
+        <a routerLink="/bakery/workshop">{{ translations.checkStatus.backToWorkshop }}</a>
+        <button type="button" class="primary-button" (click)="checkAnother()">
+          {{ translations.checkStatus.checkAnotherButton }}
+        </button>
+      </div>
+    </section>
+  }
+</div>

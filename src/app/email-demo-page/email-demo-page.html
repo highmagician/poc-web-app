@@ -1,0 +1,41 @@
+<header>
+  <h1>Email test page</h1>
+  <p>
+    Sends a real email through the Apps Script backend's MailApp integration, so you can verify
+    mail delivery independently of the workshop apply flow. The email is sent as HTML with an
+    inline QR code, plus a sample .txt file and that same QR code as .png attachments — so this
+    also doubles as a test of HTML bodies, inline images, and attachments.
+  </p>
+</header>
+
+<main>
+  <section class="status">
+    @if (statusMessage()) {
+      <p class="status-ok">{{ statusMessage() }}</p>
+    }
+    @if (errorMessage()) {
+      <p class="status-error">{{ errorMessage() }}</p>
+    }
+  </section>
+
+  <section class="form-section">
+    <label>
+      To
+      <input type="email" placeholder="you@example.com" [ngModel]="to()" (ngModelChange)="to.set($event)" />
+    </label>
+    <label>
+      Subject
+      <input type="text" [ngModel]="subject()" (ngModelChange)="subject.set($event)" />
+    </label>
+    <label>
+      Body
+      <textarea rows="4" [ngModel]="body()" (ngModelChange)="body.set($event)"></textarea>
+    </label>
+
+    <button type="button" [disabled]="!to() || sending()" (click)="send()">
+      {{ sending() ? 'Sending…' : 'Send test email' }}
+    </button>
+  </section>
+
+  <p><a routerLink="/bakery/workshop">Visit the Homie Bakery workshop page →</a></p>
+</main>

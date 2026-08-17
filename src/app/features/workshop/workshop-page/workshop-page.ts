@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { LanguageService } from '../../../i18n/language.service';
 import { WORKSHOP_COURSES } from '../workshop-courses';
@@ -9,7 +9,7 @@ import { TopBar } from '../../../shared/top-bar/top-bar';
 
 @Component({
   selector: 'app-workshop-page',
-  imports: [DecimalPipe, TopBar],
+  imports: [DecimalPipe, RouterLink, TopBar],
   templateUrl: './workshop-page.html',
   styleUrl: './workshop-page.scss',
 })

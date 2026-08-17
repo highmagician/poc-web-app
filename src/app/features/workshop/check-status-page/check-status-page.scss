@@ -1,0 +1,108 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.check-status-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #8a6a4e;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.signed-in-as {
+  color: #a88a6f;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+
+  dt {
+    color: #a88a6f;
+    font-size: 0.78rem;
+    margin-bottom: 0.15rem;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &.pending {
+    background: #f0e0cc;
+    color: #8a6a4e;
+  }
+
+  &.review {
+    background: #fbe3cd;
+    color: #b8541c;
+  }
+
+  &.paid {
+    background: #dcefdc;
+    color: #2f7a3c;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  a {
+    color: #8a6a4e;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.primary-button {
+  background: #e07a3f;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #c96a32;
+  }
+}
