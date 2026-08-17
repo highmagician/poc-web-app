@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { adminAuthGuard } from './auth/admin-auth.guard';
+import { clientStatusGuard } from './auth/client-status.guard';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
     loadComponent: () => import('./fcm-demo-page/fcm-demo-page').then((m) => m.FcmDemoPage),
   },
   {
+    path: 'email-demo',
+    loadComponent: () =>
+      import('./email-demo-page/email-demo-page').then((m) => m.EmailDemoPage),
+  },
+  {
     path: 'bakery/workshop',
     loadComponent: () =>
       import('./features/workshop/workshop-page/workshop-page').then((m) => m.WorkshopPage),
@@ -46,6 +52,21 @@ export const routes: Routes = [
     path: 'bakery/workshop/payment',
     loadComponent: () =>
       import('./features/workshop/payment-page/payment-page').then((m) => m.PaymentPage),
+  },
+  {
+    path: 'bakery/workshop/check-status/login',
+    loadComponent: () =>
+      import('./features/workshop/check-status-login-page/check-status-login-page').then(
+        (m) => m.CheckStatusLoginPage,
+      ),
+  },
+  {
+    path: 'bakery/workshop/check-status',
+    canActivate: [clientStatusGuard],
+    loadComponent: () =>
+      import('./features/workshop/check-status-page/check-status-page').then(
+        (m) => m.CheckStatusPage,
+      ),
   },
   {
     path: 'bakery/workshop/admin/login',

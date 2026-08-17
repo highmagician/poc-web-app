@@ -63,6 +63,18 @@
       line-height: 1.7;
     }
   }
+
+  .check-status-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #8a6a4e;
+    text-decoration: none;
+    font-size: 0.9rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 section h2 {

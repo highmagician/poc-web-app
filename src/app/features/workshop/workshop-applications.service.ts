@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -81,6 +81,17 @@ export class WorkshopApplicationsService {
           JSON.stringify({ action: 'create', data }),
           { headers: TEXT_PLAIN_HEADERS },
         ),
+      ),
+    );
+    return response.application;
+  }
+
+  async checkStatus(token: string, email: string): Promise<WorkshopApplication> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.get<ApiEnvelope & { application: WorkshopApplication }>(WORKSHOP_API_URL, {
+          params: new HttpParams().set('token', token).set('email', email),
+        }),
       ),
     );
     return response.application;

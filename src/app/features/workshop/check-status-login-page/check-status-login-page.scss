@@ -1,0 +1,105 @@
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #4a2f22;
+  background: #fdf6ec;
+  min-height: 100vh;
+}
+
+.check-status-login-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.login-card {
+  max-width: 420px;
+  margin: 3rem auto 0;
+  background: #fff;
+  border: 1px solid #f0e0cc;
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: #8a6a4e;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #6b5442;
+}
+
+input {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #e0cbb0;
+  border-radius: 10px;
+  background: #fffdfa;
+  color: #4a2f22;
+
+  &:focus {
+    outline: 2px solid #e07a3f;
+    outline-offset: 1px;
+  }
+}
+
+.hint {
+  color: #a88a6f;
+  font-size: 0.75rem;
+}
+
+.error {
+  margin: 0;
+  color: #c23434;
+  font-size: 0.85rem;
+}
+
+.primary-button {
+  background: #e07a3f;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #c96a32;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: #8a6a4e;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
