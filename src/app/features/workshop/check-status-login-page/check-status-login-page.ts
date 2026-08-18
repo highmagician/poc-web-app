@@ -2,9 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { isAdminAllowedEmail } from '../../../auth/auth.service';
 import { LanguageService } from '../../../i18n/language.service';
 import { ClientStatusService } from '../client-status.service';
+import { WorkshopApplicationsService } from '../workshop-applications.service';
 import { TopBar } from '../../../shared/top-bar/top-bar';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,6 +20,7 @@ export class CheckStatusLoginPage {
   private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
   private readonly clientStatusService = inject(ClientStatusService);
+  private readonly applicationsApi = inject(WorkshopApplicationsService);
 
   protected readonly languageService = inject(LanguageService);
   protected readonly t = this.languageService.t;
@@ -49,7 +50,7 @@ export class CheckStatusLoginPage {
 
     const { email, token } = this.form.getRawValue();
 
-    if (isAdminAllowedEmail(email)) {
+    if (await this.applicationsApi.checkAdminEmail(email)) {
       this.adminEmailError.set(true);
       return;
     }

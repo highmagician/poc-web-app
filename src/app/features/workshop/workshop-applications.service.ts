@@ -97,9 +97,35 @@ export class WorkshopApplicationsService {
     return response.application;
   }
 
-  async list(): Promise<WorkshopApplication[]> {
+  async checkAdminRole(idToken: string): Promise<string | null> {
     const response = await unwrap(
-      firstValueFrom(this.http.get<ApiEnvelope & { applications: WorkshopApplication[] }>(WORKSHOP_API_URL)),
+      firstValueFrom(
+        this.http.get<ApiEnvelope & { role: string | null }>(WORKSHOP_API_URL, {
+          params: new HttpParams().set('checkRole', '1').set('idToken', idToken),
+        }),
+      ),
+    );
+    return response.role;
+  }
+
+  async checkAdminEmail(email: string): Promise<boolean> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.get<ApiEnvelope & { isAdmin: boolean }>(WORKSHOP_API_URL, {
+          params: new HttpParams().set('checkAdminEmail', email),
+        }),
+      ),
+    );
+    return response.isAdmin;
+  }
+
+  async list(idToken: string): Promise<WorkshopApplication[]> {
+    const response = await unwrap(
+      firstValueFrom(
+        this.http.get<ApiEnvelope & { applications: WorkshopApplication[] }>(WORKSHOP_API_URL, {
+          params: new HttpParams().set('idToken', idToken),
+        }),
+      ),
     );
     return response.applications;
   }
@@ -117,12 +143,12 @@ export class WorkshopApplicationsService {
     return response.application;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, idToken: string): Promise<void> {
     await unwrap(
       firstValueFrom(
         this.http.post<ApiEnvelope & { id: string }>(
           WORKSHOP_API_URL,
-          JSON.stringify({ action: 'delete', id }),
+          JSON.stringify({ action: 'delete', id, idToken }),
           { headers: TEXT_PLAIN_HEADERS },
         ),
       ),
@@ -142,12 +168,12 @@ export class WorkshopApplicationsService {
     return response.application;
   }
 
-  async approve(id: string): Promise<WorkshopApplication> {
+  async approve(id: string, idToken: string): Promise<WorkshopApplication> {
     const response = await unwrap(
       firstValueFrom(
         this.http.post<ApiEnvelope & { application: WorkshopApplication }>(
           WORKSHOP_API_URL,
-          JSON.stringify({ action: 'update', id, data: { status: 'paid' } }),
+          JSON.stringify({ action: 'approve', id, data: { status: 'paid' }, idToken }),
           { headers: TEXT_PLAIN_HEADERS },
         ),
       ),
@@ -155,15 +181,16 @@ export class WorkshopApplicationsService {
     return response.application;
   }
 
-  async reject(id: string): Promise<WorkshopApplication> {
+  async reject(id: string, idToken: string): Promise<WorkshopApplication> {
     const response = await unwrap(
       firstValueFrom(
         this.http.post<ApiEnvelope & { application: WorkshopApplication }>(
           WORKSHOP_API_URL,
           JSON.stringify({
-            action: 'update',
+            action: 'reject',
             id,
             data: { status: 'pending', slipFileId: '', slipUrl: '' },
+            idToken,
           }),
           { headers: TEXT_PLAIN_HEADERS },
         ),

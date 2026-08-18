@@ -63,7 +63,8 @@ export class AdminPage {
 
   protected async approveOrder(id: string): Promise<void> {
     try {
-      const updated = await this.applicationsApi.approve(id);
+      const idToken = await this.authService.getIdToken();
+      const updated = await this.applicationsApi.approve(id, idToken);
       this.applications.update((applications) =>
         applications.map((application) => (application.id === id ? updated : application)),
       );
@@ -78,7 +79,8 @@ export class AdminPage {
     }
 
     try {
-      const updated = await this.applicationsApi.reject(id);
+      const idToken = await this.authService.getIdToken();
+      const updated = await this.applicationsApi.reject(id, idToken);
       this.applications.update((applications) =>
         applications.map((application) => (application.id === id ? updated : application)),
       );
@@ -105,7 +107,8 @@ export class AdminPage {
     }
 
     try {
-      await this.applicationsApi.remove(id);
+      const idToken = await this.authService.getIdToken();
+      await this.applicationsApi.remove(id, idToken);
       this.applications.update((applications) => applications.filter((application) => application.id !== id));
     } catch {
       this.loadError.set(true);
@@ -117,7 +120,8 @@ export class AdminPage {
     this.loadError.set(false);
 
     try {
-      const applications = await this.applicationsApi.list();
+      const idToken = await this.authService.getIdToken();
+      const applications = await this.applicationsApi.list(idToken);
       applications.sort((a, b) => b.createdAtIso.localeCompare(a.createdAtIso));
       this.applications.set(applications);
     } catch {
