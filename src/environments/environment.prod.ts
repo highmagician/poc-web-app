@@ -11,5 +11,4 @@ export const environment = {
     appId: '__FIREBASE_APP_ID__',
     vapidKey: '__FIREBASE_VAPID_KEY__',
   },
-  adminAllowedEmails: '__ADMIN_ALLOWED_EMAILS__',
 };

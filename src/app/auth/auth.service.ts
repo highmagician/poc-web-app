@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { FirebaseApp, getApps, initializeApp } from 'firebase/app';
 import {
   Auth,
@@ -11,6 +11,7 @@ import {
 } from 'firebase/auth';
 
 import { environment } from '../../environments/environment.dev';
+import { WorkshopApplicationsService } from '../features/workshop/workshop-applications.service';
 
 const ADMIN_AUTH_APP_NAME = 'workshop-admin-auth';
 
@@ -21,26 +22,12 @@ function getAdminAuthApp(): FirebaseApp {
   );
 }
 
-function parseAllowedEmails(raw: string): string[] {
-  return raw
-    .split(',')
-    .map((email) => email.trim().toLowerCase())
-    .filter((email) => email.length > 0 && !email.startsWith('__'));
-}
-
-const ALLOWED_EMAILS = parseAllowedEmails(environment.adminAllowedEmails);
-
-// Exported so the client-facing check-status login can reject admin emails without needing to
-// pull in the whole Firebase-backed AuthService just for this one string comparison.
-export function isAdminAllowedEmail(email: string): boolean {
-  return ALLOWED_EMAILS.includes(email.trim().toLowerCase());
-}
-
 export class NotAllowedError extends Error {}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly auth: Auth = getAuth(getAdminAuthApp());
+  private readonly applicationsApi = inject(WorkshopApplicationsService);
   private readonly readyPromise: Promise<void>;
 
   readonly currentUser = signal<User | null>(null);
@@ -50,7 +37,7 @@ export class AuthService {
   constructor() {
     this.readyPromise = new Promise((resolve) => {
       onAuthStateChanged(this.auth, async (user) => {
-        if (user && !this.isEmailAllowed(user.email)) {
+        if (user && !(await this.isAdmin(user))) {
           await signOut(this.auth);
           this.currentUser.set(null);
         } else {
@@ -72,7 +59,7 @@ export class AuthService {
 
     const result = await signInWithPopup(this.auth, provider);
 
-    if (!this.isEmailAllowed(result.user.email)) {
+    if (!(await this.isAdmin(result.user))) {
       await signOut(this.auth);
       throw new NotAllowedError('This Google account is not on the admin allowlist.');
     }
@@ -82,7 +69,20 @@ export class AuthService {
     await signOut(this.auth);
   }
 
-  private isEmailAllowed(email: string | null): boolean {
-    return !!email && isAdminAllowedEmail(email);
+  // Backend endpoints protected by requireAdminRole_ (Code.js) expect this token as proof of
+  // the caller's admin session — see workshop-applications.service.ts.
+  async getIdToken(): Promise<string> {
+    const user = this.currentUser();
+    if (!user) {
+      throw new Error('Not signed in.');
+    }
+    return user.getIdToken();
+  }
+
+  // Source of truth is the "Admins" sheet in poc-apps-script, not a compiled-in list — this
+  // round-trips to Code.js's checkRole endpoint on every sign-in check.
+  private async isAdmin(user: User): Promise<boolean> {
+    const idToken = await user.getIdToken();
+    return !!(await this.applicationsApi.checkAdminRole(idToken));
   }
 }
